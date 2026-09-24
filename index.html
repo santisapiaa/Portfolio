@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santiago Sapia — Software Developer</title>
+<meta name="description" content="Portfolio de Santiago Sapia, estudiante de Desarrollo de Software (UADE). Proyectos en React, Next.js, React Native y Spring Boot.">
+<meta name="theme-color" content="#0b0f14">
+<link rel="canonical" href="https://santisapia.vercel.app/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://santisapia.vercel.app/">
+<meta property="og:title" content="Santiago Sapia — Software Developer">
+<meta property="og:description" content="Estudiante de Desarrollo de Software en UADE. Apps web y móviles con React, Next.js, React Native y Spring Boot.">
+<meta property="og:image" content="https://santisapia.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://santisapia.vercel.app/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="noise"></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="logo">SS<span class="dot">.</span></a>
+    <button id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">Sobre mí</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Proyectos</a>
+      <a href="#experience">Experiencia</a>
+      <a href="#contact">Contacto</a>
+      <a href="Santiago_Sapia_CV.pdf" target="_blank" rel="noopener" class="cv-btn">Descargar CV</a>
+    </div>
+  </div>
+</nav>
+
+<header id="home" class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow"><span class="blink">●</span> disponible para nuevas oportunidades</p>
+      <h1>Hola, soy <span class="highlight">Santiago Sapia</span></h1>
+      <p class="hero-role">
+        <span class="sr-only">Estudiante de Desarrollo de Software y desarrollador frontend.</span>
+        <span id="typed" aria-hidden="true"></span><span class="cursor" aria-hidden="true">|</span>
+      </p>
+      <p class="hero-desc">
+        Estudiante de la Tecnicatura en Desarrollo de Software (UADE) construyendo aplicaciones web y móviles
+        que están online y las usa gente real — con foco en el diseño y el frontend.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contact" class="btn btn-ghost">Contactarme</a>
+      </div>
+      <div class="hero-links">
+        <a href="https://github.com/santisapiaa" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.94c.58.1.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.6.24 2.77.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.26 5.69.42.36.78 1.08.78 2.18 0 1.58-.01 2.85-.01 3.24 0 .32.2.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/santisapiaa" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"/></svg>
+        </a>
+        <a href="mailto:sapiasantiagoo@gmail.com" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M2 5.5C2 4.67 2.67 4 3.5 4h17c.83 0 1.5.67 1.5 1.5v13c0 .83-.67 1.5-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6.2L19.8 6H4.2Zm15.8 1.68-7.4 5.89a1.5 1.5 0 0 1-1.9 0L4 7.68V18h16V7.68Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <img src="assets/photo.jpg" alt="Santiago Sapia" width="480" height="600">
+      </div>
+      <div class="photo-tag">&lt;/&gt; en progreso</div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span></span>scroll</div>
+</header>
+
+<main>
+
+  <section id="about" class="section">
+    <p class="section-label">01 — Sobre mí</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Soy estudiante de la <strong>Tecnicatura en Desarrollo de Software</strong> en la UADE y construí
+          varias aplicaciones por mi cuenta y en equipo — desde una app móvil de pedidos con backend propio
+          hasta plataformas web con autenticación y base de datos, y sitios para negocios reales.
+          Me gusta especialmente la parte de <strong>diseño de interfaces y frontend</strong>.
+        </p>
+        <p>
+          Antes de esto trabajé en atención al cliente, lo que me dio buenas bases de comunicación,
+          organización y manejo de situaciones bajo presión — algo que también aplico cuando trabajo en equipo
+          en un proyecto de software.
+        </p>
+        <p>
+          Hoy estoy buscando mi primera oportunidad como <strong>Desarrollador Junior</strong>,
+          <strong> Practicante de Desarrollo de Software</strong> o <strong>Soporte Técnico</strong>
+          para seguir aprendiendo y sumar valor real a un equipo. Hablo inglés y portugués.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <span class="stat-num">5</span>
+          <span class="stat-label">proyectos realizados</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">4</span>
+          <span class="stat-label">sitios online en producción</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">2</span>
+          <span class="stat-label">negocios reales como clientes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">15</span>
+          <span class="stat-label">materias aprobadas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <p class="section-label">02 — Skills técnicas</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h3>Lenguajes</h3>
+        <div class="chips">
+          <span>JavaScript</span><span>TypeScript</span><span>HTML</span><span>CSS</span><span>Java</span><span>SQL</span><span>Python</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Frameworks &amp; Librerías</h3>
+        <div class="chips">
+          <span>React</span><span>Next.js</span><span>React Native</span><span>Expo</span><span>Tailwind CSS</span><span>Framer Motion</span><span>Spring Boot</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Bases de datos</h3>
+        <div class="chips">
+          <span>Supabase (PostgreSQL)</span><span>MySQL</span><span>Firebase</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Herramientas</h3>
+        <div class="chips">
+          <span>Git</span><span>GitHub</span><span>Vercel</span><span>Vite</span><span>Maven</span><span>JWT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <p class="section-label">03 — Proyectos</p>
+
+    <article class="project-card">
+      <a href="https://github.com/alejotaccone/ParriYa_Frontend" target="_blank" rel="noopener" class="project-media" tabindex="-1" aria-hidden="true">
+        <img src="assets/projects/parriya.webp" alt="Portada de ParriYa con la pantalla de inicio de la app" width="1200" height="750" loading="lazy" decoding="async">
+      </a>
+      <div class="project-info">
+        <span class="project-tag">App móvil · Trabajo en equipo</span>
+        <h3>ParriYa!</h3>
+        <p>Aplicación móvil de pedidos para una parrilla, con backend propio en Spring Boot y autenticación JWT.</p>
+        <p class="project-role"><strong>Mi rol:</strong> diseño de la interfaz y desarrollo frontend.</p>
+        <div class="chips">
+          <span>React Native</span><span>Expo Router</span><span>Firebase</span><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>JWT</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/alejotaccone/ParriYa_Frontend" target="_blank" rel="noopener">Frontend →</a>
+          <a href="https://github.com/alejotaccone/ParriYa_Backend" target="_blank" rel="noopener">Backend →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card reverse">
+      <a href="https://hayequipo-app.vercel.app/" target="_blank" rel="noopener" class="project-media" tabindex="-1" aria-hidden="true">
+        <img src="assets/projects/hayequipo.webp" alt="Pantalla de ingreso de HayEquipo" width="1200" height="750" loading="lazy" decoding="async">
+      </a>
+      <div class="project-info">
+        <span class="project-tag">App web · Trabajo en equipo</span>
+        <h3>HayEquipo</h3>
+        <p>Plataforma web para organizar planteles deportivos en clubes: gestión de jugadores, equipos y convocatorias.</p>
+        <p class="project-role"><strong>Mi rol:</strong> diseño de la interfaz y desarrollo frontend.</p>
+        <div class="chips">
+          <span>React</span><span>TypeScript</span><span>Vite</span><span>Supabase</span><span>Tailwind CSS</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/ivolevy/hayequipo-mvp" target="_blank" rel="noopener">Repositorio →</a>
+          <a href="https://hayequipo-app.vercel.app/" target="_blank" rel="noopener">Ver demo en vivo →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <a href="https://orient-ai-phi.vercel.app/" target="_blank" rel="noopener" class="project-media" tabindex="-1" aria-hidden="true">
+        <img src="assets/projects/orientai.webp" alt="Página principal de OrientAI" width="1200" height="750" loading="lazy" decoding="async">
+      </a>
+      <div class="project-info">
+        <span class="project-tag">App web · Proyecto personal</span>
+        <h3>OrientAI</h3>
+        <p>Plataforma de orientación vocacional para estudiantes secundarios que no saben qué estudiar. Armada por fuera de la facultad.</p>
+        <div class="chips">
+          <span>Next.js</span><span>Framer Motion</span><span>Supabase</span><span>Vercel</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/santisapiaa/orient-ai" target="_blank" rel="noopener">Repositorio →</a>
+          <a href="https://orient-ai-phi.vercel.app/" target="_blank" rel="noopener">Ver demo en vivo →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card reverse">
+      <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener" class="project-media" tabindex="-1" aria-hidden="true">
+        <img src="assets/projects/dentar.webp" alt="Página principal del sitio de Dentar Devoto" width="1200" height="750" loading="lazy" decoding="async">
+      </a>
+      <div class="project-info">
+        <span class="project-tag">App web · Cliente real</span>
+        <h3>Dentar Devoto</h3>
+        <p>Sitio web para un consultorio odontológico de Villa Devoto: servicios, equipo de profesionales, pedido de turnos y contacto directo por WhatsApp.</p>
+        <div class="chips">
+          <span>React</span><span>Vercel</span>
+        </div>
+        <div class="project-links">
+          <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener">Ver sitio en vivo →</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="project-media" tabindex="-1" aria-hidden="true">
+        <img src="assets/projects/benedetto.webp" alt="Página principal del sitio de Benedetto Peluquería" width="1200" height="750" loading="lazy" decoding="async">
+      </a>
+      <div class="project-info">
+        <span class="project-tag">App web · Cliente real</span>
+        <h3>Benedetto Peluquería</h3>
+        <p>Sitio web para una peluquería y barbería de Villa del Parque: servicios, galería, reseñas, ubicación y reserva de turnos.</p>
+        <div class="chips">
+          <span>React</span><span>Vercel</span>
+        </div>
+        <div class="project-links">
+          <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener">Ver sitio en vivo →</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="experience" class="section">
+    <p class="section-label">04 — Educación &amp; Experiencia</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-date">2024 — En curso</span>
+        <h3>Tecnicatura en Desarrollo de Software</h3>
+        <p class="timeline-sub">UADE</p>
+        <p>Promedio 7.35 · 15 materias aprobadas · Cursando Proceso de Desarrollo de Software.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">Oct. 2024 — Actualidad</span>
+        <h3>Recepcionista</h3>
+        <p class="timeline-sub">Benedetto Peluquería</p>
+        <p>Atención al cliente presencial y telefónica, gestión de turnos y agenda diaria.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">Oct. 2024 — Dic. 2024</span>
+        <h3>Operador Telefónico</h3>
+        <p class="timeline-sub">Beretta Galarce &amp; Asociados</p>
+        <p>Atención de llamadas entrantes y salientes, registro en sistema interno.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">2017 — 2022</span>
+        <h3>Bachillerato en Economía y Administración</h3>
+        <p class="timeline-sub">Instituto Evangélico Americano</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact-section">
+    <p class="section-label">05 — Contacto</p>
+    <h2>¿Buscás sumar a alguien con ganas de aprender?</h2>
+    <p class="contact-desc">Estoy abierto a oportunidades como Desarrollador Junior, Practicante o Soporte Técnico. Escribime, respondo rápido.</p>
+    <div class="contact-grid">
+      <a href="mailto:sapiasantiagoo@gmail.com" class="contact-card">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">sapiasantiagoo@gmail.com</span>
+      </a>
+      <a href="tel:+541166429749" class="contact-card">
+        <span class="contact-label">Teléfono</span>
+        <span class="contact-value">+54 11 6642-9749</span>
+      </a>
+      <a href="https://github.com/santisapiaa" target="_blank" rel="noopener" class="contact-card">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value">github.com/santisapiaa</span>
+      </a>
+      <a href="https://linkedin.com/in/santisapiaa" target="_blank" rel="noopener" class="contact-card">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value">linkedin.com/in/santisapiaa</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Diseñado y construido por Santiago Sapia · <span id="year"></span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
