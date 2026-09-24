@@ -18,13 +18,14 @@ Acá están mis proyectos, skills, experiencia y datos de contacto.
 ## Sobre el sitio
 
 Sitio estático de una sola página hecho con **HTML, CSS y JavaScript puro**, sin frameworks ni build.
-Tiene diseño responsive, respeta `prefers-reduced-motion`, incluye etiquetas Open Graph para las vistas previas en
+Está disponible en español, inglés y portugués (con `?lang=en` o `?lang=pt` se abre directo en ese idioma), tiene diseño responsive, respeta `prefers-reduced-motion`, incluye etiquetas Open Graph para las vistas previas en
 LinkedIn y está deployado en Vercel.
 
 ```
 ├── index.html               contenido y estructura
 ├── style.css                estilos (tema oscuro)
-├── script.js                menú mobile, efecto de texto y animaciones al hacer scroll
+├── script.js                menú mobile, selector de idioma, efecto de texto y animaciones
+├── i18n.js                  traducciones al inglés y portugués
 ├── favicon.svg
 ├── Santiago_Sapia_CV.pdf    CV descargable
 └── assets/

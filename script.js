@@ -10,24 +10,95 @@ navLinks.querySelectorAll('a').forEach(a => {
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Language
+// Spanish comes from the markup; keep a copy so we can switch back to it.
+const I18N_ES = {
+  'meta.title': document.title,
+  'meta.description': document.querySelector('meta[name="description"]').content
+};
+document.querySelectorAll('[data-i18n]').forEach(el => { I18N_ES[el.dataset.i18n] = el.innerHTML.trim(); });
+document.querySelectorAll('[data-i18n-alt]').forEach(el => { I18N_ES[el.dataset.i18nAlt] = el.alt; });
+document.querySelectorAll('[data-i18n-aria]').forEach(el => { I18N_ES[el.dataset.i18nAria] = el.getAttribute('aria-label'); });
+I18N.es = I18N_ES;
+
+let currentLang = 'es';
+
+function storedLang() {
+  try { return localStorage.getItem('lang'); } catch { return null; }
+}
+
+function initialLang() {
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  if (LANGS.includes(fromUrl)) return fromUrl;
+  const saved = storedLang();
+  if (LANGS.includes(saved)) return saved;
+  const browser = (navigator.language || 'es').slice(0, 2).toLowerCase();
+  return LANGS.includes(browser) ? browser : 'es';
+}
+
+function setLang(lang, save) {
+  const dict = I18N[lang];
+  currentLang = lang;
+  document.documentElement.lang = HTML_LANG[lang];
+  document.title = dict['meta.title'];
+  document.querySelector('meta[name="description"]').content = dict['meta.description'];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const text = dict[el.dataset.i18n];
+    if (text !== undefined) el.innerHTML = text;
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = dict[el.dataset.i18nAlt]; });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', dict[el.dataset.i18nAria]); });
+
+  document.getElementById('langFlag').innerHTML = FLAGS[lang];
+  document.getElementById('langCode').textContent = lang.toUpperCase();
+  langMenu.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-current', b.dataset.lang === lang));
+
+  restartTyping();
+  if (save) {
+    try { localStorage.setItem('lang', lang); } catch {}
+  }
+}
+
+const langBtn = document.getElementById('langBtn');
+const langMenu = document.getElementById('langMenu');
+langMenu.querySelectorAll('[data-flag]').forEach(el => { el.innerHTML = FLAGS[el.dataset.flag]; });
+
+function toggleLangMenu(open) {
+  langMenu.hidden = !open;
+  langBtn.setAttribute('aria-expanded', open);
+}
+langBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  toggleLangMenu(langMenu.hidden);
+  if (!langMenu.hidden) langMenu.querySelector('[aria-current="true"]')?.focus();
+});
+langMenu.addEventListener('click', e => {
+  const btn = e.target.closest('[data-lang]');
+  if (!btn) return;
+  setLang(btn.dataset.lang, true);
+  toggleLangMenu(false);
+  langBtn.focus();
+});
+document.addEventListener('click', e => {
+  if (!langMenu.hidden && !e.target.closest('#lang')) toggleLangMenu(false);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !langMenu.hidden) { toggleLangMenu(false); langBtn.focus(); }
+});
+
 // Typed role text
-const roles = [
-  'Estudiante de Desarrollo de Software',
-  'Diseño de interfaces & Frontend',
-  'React · Next.js · React Native',
-  'Aprendiendo algo nuevo cada día'
-];
 const typedEl = document.getElementById('typed');
-let roleIndex = 0, charIndex = 0, deleting = false;
+let roleIndex = 0, charIndex = 0, deleting = false, typeTimer;
 
 function typeLoop() {
+  const roles = ROLES[currentLang];
   const current = roles[roleIndex];
   if (!deleting) {
     charIndex++;
     typedEl.textContent = current.slice(0, charIndex);
     if (charIndex === current.length) {
       deleting = true;
-      setTimeout(typeLoop, 1600);
+      typeTimer = setTimeout(typeLoop, 1600);
       return;
     }
   } else {
@@ -38,13 +109,20 @@ function typeLoop() {
       roleIndex = (roleIndex + 1) % roles.length;
     }
   }
-  setTimeout(typeLoop, deleting ? 35 : 55);
+  typeTimer = setTimeout(typeLoop, deleting ? 35 : 55);
 }
-if (reduceMotion) {
-  typedEl.textContent = roles[0];
-} else {
-  typeLoop();
+
+function restartTyping() {
+  clearTimeout(typeTimer);
+  roleIndex = 0; charIndex = 0; deleting = false;
+  if (reduceMotion) {
+    typedEl.textContent = ROLES[currentLang][0];
+  } else {
+    typeLoop();
+  }
 }
+
+setLang(initialLang(), false);
 
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
