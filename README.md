@@ -34,7 +34,7 @@ LinkedIn y está deployado en Vercel.
 ├── Santiago_Sapia_CV_PT.pdf CV en portugués (se descarga el CV del idioma del sitio)
 └── assets/
     ├── photo.jpg
-    ├── og-image.jpg         vista previa al compartir el link
+    ├── og-image-v2.jpg      vista previa al compartir el link
     ├── apple-touch-icon.png
     └── projects/            capturas de los proyectos
 ```
