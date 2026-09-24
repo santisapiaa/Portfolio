@@ -27,7 +27,8 @@ LinkedIn y está deployado en Vercel.
 ├── script.js                menú mobile, selector de idioma, efecto de texto y animaciones
 ├── i18n.js                  traducciones al inglés y portugués
 ├── favicon.svg
-├── Santiago_Sapia_CV.pdf    CV descargable
+├── Santiago_Sapia_CV.pdf    CV en español
+├── Santiago_Sapia_CV_EN.pdf CV en inglés (se descarga según el idioma del sitio)
 └── assets/
     ├── photo.jpg
     ├── og-image.jpg         vista previa al compartir el link

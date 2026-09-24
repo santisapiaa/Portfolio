@@ -54,6 +54,7 @@ function setLang(lang, save) {
   document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = dict[el.dataset.i18nAlt]; });
   document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', dict[el.dataset.i18nAria]); });
 
+  document.querySelector('.cv-btn').href = CV_FILES[lang];
   document.getElementById('langFlag').innerHTML = FLAGS[lang];
   document.getElementById('langCode').textContent = lang.toUpperCase();
   langMenu.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-current', b.dataset.lang === lang));

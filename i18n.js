@@ -29,7 +29,7 @@ const I18N = {
     'about.label': '01 — About me',
     'about.p1': "I'm studying <strong>Software Development</strong> at UADE (Buenos Aires) and I've built several applications on my own and in teams — from a mobile ordering app with its own backend to web platforms with authentication and databases, and websites for real businesses. I especially enjoy <strong>interface design and frontend</strong>.",
     'about.p2': 'Before this I worked in customer service, which gave me a solid foundation in communication, organization and handling pressure — something I also bring to teamwork on software projects.',
-    'about.p3': "I'm looking for my first role as a <strong>Junior Developer</strong>, <strong>Software Development Intern</strong> or <strong>Technical Support</strong> to keep learning and add real value to a team. I speak English and Portuguese.",
+    'about.p3': "I'm looking for my first role as a <strong>Junior Developer</strong>, <strong>Software Development Intern</strong> or <strong>Technical Support</strong> to keep learning and add real value to a team. I'm a native Spanish speaker with intermediate English and basic Portuguese.",
     'about.stat1': 'projects built',
     'about.stat2': 'sites live in production',
     'about.stat3': 'real businesses as clients',
@@ -105,7 +105,7 @@ const I18N = {
     'about.label': '01 — Sobre mim',
     'about.p1': 'Sou estudante de <strong>Desenvolvimento de Software</strong> na UADE (Buenos Aires) e já criei várias aplicações sozinho e em equipe — desde um app mobile de pedidos com backend próprio até plataformas web com autenticação e banco de dados, e sites para negócios reais. Gosto especialmente de <strong>design de interfaces e frontend</strong>.',
     'about.p2': 'Antes disso trabalhei com atendimento ao cliente, o que me deu uma boa base em comunicação, organização e lidar com pressão — algo que também aplico ao trabalhar em equipe em projetos de software.',
-    'about.p3': 'Hoje procuro minha primeira oportunidade como <strong>Desenvolvedor Júnior</strong>, <strong>Estagiário de Desenvolvimento de Software</strong> ou <strong>Suporte Técnico</strong> para continuar aprendendo e agregar valor real a uma equipe. Falo inglês e português.',
+    'about.p3': 'Hoje procuro minha primeira oportunidade como <strong>Desenvolvedor Júnior</strong>, <strong>Estagiário de Desenvolvimento de Software</strong> ou <strong>Suporte Técnico</strong> para continuar aprendendo e agregar valor real a uma equipe. Meu idioma nativo é o espanhol; falo inglês intermediário e português básico.',
     'about.stat1': 'projetos realizados',
     'about.stat2': 'sites no ar em produção',
     'about.stat3': 'negócios reais como clientes',
@@ -165,6 +165,13 @@ const ROLES = {
   es: ['Estudiante de Desarrollo de Software', 'Diseño de interfaces & Frontend', 'React · Next.js · React Native', 'Aprendiendo algo nuevo cada día'],
   en: ['Software Development Student', 'Interface Design & Frontend', 'React · Next.js · React Native', 'Learning something new every day'],
   pt: ['Estudante de Desenvolvimento de Software', 'Design de Interfaces & Frontend', 'React · Next.js · React Native', 'Aprendendo algo novo todo dia']
+};
+
+// CV file per language (Portuguese uses the English CV until there's a Portuguese one)
+const CV_FILES = {
+  es: 'Santiago_Sapia_CV.pdf',
+  en: 'Santiago_Sapia_CV_EN.pdf',
+  pt: 'Santiago_Sapia_CV_EN.pdf'
 };
 
 const LANGS = ['es', 'en', 'pt'];
