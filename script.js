@@ -1,3 +1,8 @@
+// Vercel Analytics custom events (window.va is queued in index.html until the script loads)
+function track(name, data) {
+  window.va?.('event', { name, data });
+}
+
 // Mobile nav toggle
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
@@ -56,6 +61,7 @@ function setLang(lang, save) {
   restartTyping();
   if (save) {
     try { localStorage.setItem('lang', lang); } catch {}
+    track('Language Change', { lang });
   }
 }
 
@@ -123,6 +129,40 @@ function restartTyping() {
 }
 
 setLang(initialLang(), false);
+
+// Click tracking: CV downloads, project links and contact links
+function contactMethod(href) {
+  if (href.startsWith('mailto:')) return 'email';
+  if (href.startsWith('tel:')) return 'phone';
+  if (href.includes('linkedin.com')) return 'linkedin';
+  if (href.includes('github.com')) return 'github';
+  return null;
+}
+
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href]');
+  if (!a) return;
+  const href = a.getAttribute('href');
+
+  if (href.endsWith('.pdf')) {
+    track('CV Download', { lang: currentLang });
+    return;
+  }
+
+  const card = a.closest('.project-card');
+  if (card) {
+    const project = card.querySelector('h3').textContent.trim();
+    const link = a.classList.contains('project-media') ? 'image'
+      : href.includes('github.com') ? 'repo' : 'demo';
+    track('Project Click', { project, link });
+    return;
+  }
+
+  const method = contactMethod(href);
+  if (method && a.closest('.hero-links, .contact-grid')) {
+    track('Contact Click', { method, location: a.closest('.hero-links') ? 'hero' : 'contact' });
+  }
+});
 
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
