@@ -398,6 +398,7 @@ a:focus-visible, button:focus-visible {
   transition: border-color 0.2s, transform 0.2s;
 }
 .skill-card:hover { border-color: var(--accent-dim); transform: translateY(-3px); }
+.skill-card-wide { grid-column: 1 / -1; }
 .skill-card h3 {
   font-size: 0.95rem;
   color: var(--text-dim);
