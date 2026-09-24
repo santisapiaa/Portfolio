@@ -26,6 +26,8 @@ LinkedIn y está deployado en Vercel.
 ├── style.css                estilos (tema oscuro)
 ├── script.js                menú mobile, selector de idioma, efecto de texto y animaciones
 ├── i18n.js                  traducciones al inglés y portugués
+├── 404.html                 página de error con el estilo del sitio
+├── robots.txt / sitemap.xml para buscadores
 ├── favicon.svg
 ├── Santiago_Sapia_CV.pdf    CV en español
 ├── Santiago_Sapia_CV_EN.pdf CV en inglés
