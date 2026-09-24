@@ -510,6 +510,11 @@ a:focus-visible, button:focus-visible {
   transition: border-color 0.2s;
 }
 .project-links a:hover { border-color: var(--accent); }
+.project-note {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
 
 /* TIMELINE */
 .timeline {
