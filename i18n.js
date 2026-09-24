@@ -179,11 +179,11 @@ const ROLES = {
   pt: ['Estudante de Desenvolvimento de Software', 'Design de Interfaces & Frontend', 'React · Next.js · React Native', 'Aprendendo algo novo todo dia']
 };
 
-// CV file per language (Portuguese uses the English CV until there's a Portuguese one)
+// CV file per language
 const CV_FILES = {
   es: 'Santiago_Sapia_CV.pdf',
   en: 'Santiago_Sapia_CV_EN.pdf',
-  pt: 'Santiago_Sapia_CV_EN.pdf'
+  pt: 'Santiago_Sapia_CV_PT.pdf'
 };
 
 const LANGS = ['es', 'en', 'pt'];
