@@ -1,6 +1,6 @@
 # Santiago Sapia — Portfolio
 
-Portfolio personal: **[santisapia.vercel.app](https://santisapia.vercel.app)**
+Portfolio personal: **[santiagosapia.dev](https://www.santiagosapia.dev)**
 
 Estudiante de la Tecnicatura en Desarrollo de Software (UADE), con foco en diseño de interfaces y frontend.
 Acá están mis proyectos, skills, experiencia y datos de contacto.
