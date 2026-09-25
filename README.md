@@ -10,7 +10,7 @@ Acá están mis proyectos, skills, experiencia y datos de contacto.
 | Proyecto | Descripción | Stack |
 | --- | --- | --- |
 | [ParriYa!](https://github.com/alejotaccone/ParriYa_Frontend) | App móvil de pedidos para una parrilla | React Native, Expo, Spring Boot, MySQL |
-| [HayEquipo](https://hayequipo-app.vercel.app/) | Gestión de planteles deportivos para clubes | React, TypeScript, Supabase, Tailwind |
+| [HayEquipo](https://hayequipo-ten.vercel.app/) | Gestión de planteles deportivos para clubes | React, TypeScript, Supabase, Tailwind |
 | [OrientAI](https://orient-ai-phi.vercel.app/) | Orientación vocacional para estudiantes secundarios | Next.js, Framer Motion, Supabase |
 | [Dentar Devoto](https://dentar-devoto-front.vercel.app/) | Sistema de gestión para un consultorio odontológico (código privado) | React, Node.js, Express, PostgreSQL |
 | [Benedetto Peluquería](https://benedetto-peluqueria-mu.vercel.app/) ([repo](https://github.com/santisapiaa/BenedettoPeluqueria)) | Sitio de una peluquería y barbería con horarios libres en tiempo real | Next.js, TypeScript, Tailwind, Google Calendar API |
