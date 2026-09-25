@@ -37,6 +37,8 @@ function initialLang() {
   if (LANGS.includes(fromUrl)) return fromUrl;
   const saved = storedLang();
   if (LANGS.includes(saved)) return saved;
+  // Crawlers (Google, Bing, link previews) browse in English; keep them on the Spanish default
+  if (/bot|crawl|spider|slurp|lighthouse|facebookexternalhit|linkedin|whatsapp|preview/i.test(navigator.userAgent)) return 'es';
   const browser = (navigator.language || 'es').slice(0, 2).toLowerCase();
   return LANGS.includes(browser) ? browser : 'es';
 }
