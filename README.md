@@ -13,7 +13,7 @@ Acá están mis proyectos, skills, experiencia y datos de contacto.
 | [HayEquipo](https://hayequipo-app.vercel.app/) | Gestión de planteles deportivos para clubes | React, TypeScript, Supabase, Tailwind |
 | [OrientAI](https://orient-ai-phi.vercel.app/) | Orientación vocacional para estudiantes secundarios | Next.js, Framer Motion, Supabase |
 | [Dentar Devoto](https://dentar-devoto-front.vercel.app/) | Sistema de gestión para un consultorio odontológico (código privado) | React, Node.js, Express, PostgreSQL |
-| [Benedetto Peluquería](https://benedetto-peluqueria-mu.vercel.app/) ([repo](https://github.com/santisapiaa/BenedettoPeluqueria)) | Sitio de una peluquería y barbería | React |
+| [Benedetto Peluquería](https://benedetto-peluqueria-mu.vercel.app/) ([repo](https://github.com/santisapiaa/BenedettoPeluqueria)) | Sitio de una peluquería y barbería con horarios libres en tiempo real | Next.js, TypeScript, Tailwind, Google Calendar API |
 
 ## Sobre el sitio
 
