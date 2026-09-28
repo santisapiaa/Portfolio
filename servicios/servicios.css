@@ -338,10 +338,24 @@
 .plan-card .check-list { margin-bottom: 22px; }
 .plan-price {
   margin-top: auto;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.plan-price span { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); }
+.plan-price strong { font-size: 1.9rem; line-height: 1; letter-spacing: -0.01em; color: var(--text); }
+.plan-featured .plan-price strong { color: var(--accent); }
+.plan-launch {
+  display: inline-block;
+  margin: -18px 0 28px;
+  padding: 5px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(245, 196, 81, 0.4);
+  background: rgba(245, 196, 81, 0.08);
   color: var(--gold);
-  margin-bottom: 14px;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 .plan-btn { text-align: center; }
 .plan-note {
