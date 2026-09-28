@@ -36,6 +36,74 @@ if (!reduceMotion && 'IntersectionObserver' in window) {
   });
 }
 
+// Navbar: transparent at the top, floating pill once the page scrolls
+const navbar = document.getElementById('navbar');
+new IntersectionObserver(([entry]) => {
+  navbar.classList.toggle('is-scrolled', !entry.isIntersecting);
+}).observe(document.getElementById('navSentinel'));
+
+// Highlight the menu link of the section on screen (only the ones that are in the menu)
+const navLinks = [...document.querySelectorAll('.svc-nav .nav-links a, .m-link')];
+const menuIds = new Set(navLinks.map(a => a.hash.slice(1)));
+function setCurrent(id) {
+  navLinks.forEach(a => {
+    if (a.hash === `#${id}`) a.setAttribute('aria-current', 'true');
+    else a.removeAttribute('aria-current');
+  });
+}
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) setCurrent(menuIds.has(entry.target.id) ? entry.target.id : null);
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+document.querySelectorAll('main > [id]').forEach(el => sectionObserver.observe(el));
+
+// Mobile menu: full-screen panel
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+function setMenu(open, returnFocus) {
+  mobileMenu.classList.toggle('is-open', open);
+  mobileMenu.inert = !open;
+  document.body.classList.toggle('menu-open', open);
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  if (open) setTimeout(() => mobileMenu.querySelector('a').focus({ preventScroll: true }), 50);
+  else if (returnFocus) menuBtn.focus();
+}
+const menuIsOpen = () => mobileMenu.classList.contains('is-open');
+
+menuBtn.addEventListener('click', () => setMenu(!menuIsOpen(), true));
+mobileMenu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+document.addEventListener('keydown', e => {
+  if (!menuIsOpen()) return;
+  if (e.key === 'Escape') setMenu(false, true);
+  if (e.key === 'Tab') {
+    // Keep keyboard focus inside the open menu (the close button plus the panel links)
+    const items = [menuBtn, ...mobileMenu.querySelectorAll('a')];
+    const i = items.indexOf(document.activeElement);
+    const next = e.shiftKey ? (i <= 0 ? items.length - 1 : i - 1) : (i === items.length - 1 ? 0 : i + 1);
+    e.preventDefault();
+    items[next].focus();
+  }
+});
+window.matchMedia('(min-width: 861px)').addEventListener('change', e => { if (e.matches && menuIsOpen()) setMenu(false); });
+
+// Hero: as the page scrolls, the text fades and the agenda card rises faster (CSS reads --hp, desktop only)
+const hero = document.getElementById('inicio');
+if (hero && !reduceMotion) {
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const p = Math.min(1, Math.max(0, window.scrollY / hero.offsetHeight));
+    hero.style.setProperty('--hp', p.toFixed(3));
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+}
+
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section
 const WA_LINK = 'https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio';
 

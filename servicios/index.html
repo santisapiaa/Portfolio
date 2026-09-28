@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=4">
-<link rel="stylesheet" href="/servicios/servicios.css?v=6">
+<link rel="stylesheet" href="/servicios/servicios.css?v=7">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -71,25 +71,45 @@
 
 <div class="noise"></div>
 
-<nav id="navbar">
+<div id="navSentinel" class="nav-sentinel" aria-hidden="true"></div>
+<nav id="navbar" class="svc-nav" aria-label="Principal">
   <div class="nav-inner">
     <a href="#inicio" class="logo">SS<span class="dot">.</span></a>
-    <div class="nav-right">
-      <div class="nav-links">
+    <div class="nav-links">
+        <a href="#que-hago">Qué hago</a>
         <a href="#casos">Casos</a>
         <a href="#paquetes">Paquetes</a>
-        <a href="#como-trabajo">Cómo trabajo</a>
+        <a href="#proceso">Proceso</a>
         <a href="#agendar">Agendar</a>
-        <a href="#preguntas">Preguntas</a>
-      </div>
-      <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="nav-wa" data-wa="nav">WhatsApp</a>
     </div>
+    <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="nav-wa" data-wa="nav">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg>
+      Escribime
+    </a>
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<div class="m-menu" id="mobileMenu" inert>
+  <nav class="m-links" aria-label="Menú">
+    <a href="#que-hago" class="m-link" style="--i:0"><span>01</span>Qué hago</a>
+    <a href="#casos" class="m-link" style="--i:1"><span>02</span>Casos</a>
+    <a href="#paquetes" class="m-link" style="--i:2"><span>03</span>Paquetes</a>
+    <a href="#proceso" class="m-link" style="--i:3"><span>04</span>Proceso</a>
+    <a href="#agendar" class="m-link" style="--i:4"><span>05</span>Agendar</a>
+  </nav>
+  <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="btn-wa btn-wa-lg m-wa" data-wa="menu">
+    <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg>
+    Escribime por WhatsApp
+  </a>
+</div>
 
 <main>
 
 <header id="inicio" class="svc-hero">
+  <div class="hero-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="svc-hero-text">
     <p class="svc-intro">
       <img src="/servicios/santiago.webp" alt="" width="44" height="44">
@@ -129,6 +149,7 @@
 <section id="problemas" class="section">
   <p class="section-label">Lo que resuelvo</p>
   <h2 class="svc-title">¿Te pasa alguna de estas?</h2>
+  <p class="svc-lead">Si te identificás con alguna, una web bien pensada lo puede resolver.</p>
   <div class="problem-grid">
     <article class="problem-card reveal">
       <span class="problem-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
@@ -153,9 +174,37 @@
   </div>
 </section>
 
+<section id="que-hago" class="section">
+  <p class="section-label">Qué hago</p>
+  <h2 class="svc-title">Lo que puedo armar para tu negocio</h2>
+  <p class="svc-lead">Todo pensado para que tu negocio se vea profesional y te lleguen más turnos, sin que tengas que saber de tecnología.</p>
+  <div class="service-grid">
+    <article class="service-card reveal">
+      <span class="problem-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      <h3>Sitios web</h3>
+      <p>Tu negocio en Google y toda la información en un solo link: servicios, horarios, ubicación y un botón directo a tu WhatsApp.</p>
+      <a href="#paquetes" class="service-link">Ver paquetes →</a>
+    </article>
+    <article class="service-card service-featured reveal">
+      <span class="service-badge">Mi especialidad</span>
+      <span class="problem-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></span>
+      <h3>Turnos online y panel de gestión</h3>
+      <p>Tus clientes ven los horarios libres y reservan solos. Vos tenés la agenda y los datos de cada cliente ordenados en un panel, sincronizado con Google Calendar.</p>
+      <a href="#casos" class="service-link">Ver casos →</a>
+    </article>
+    <article class="service-card reveal">
+      <span class="problem-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <h3>Mantenimiento y hosting</h3>
+      <p>Me ocupo de que tu web esté online y al día, con los cambios menores incluidos. El dominio siempre queda a tu nombre.</p>
+      <a href="/terminos" class="service-link">Ver condiciones →</a>
+    </article>
+  </div>
+</section>
+
 <section id="casos" class="section">
   <p class="section-label">Casos reales</p>
   <h2 class="svc-title">Lo que ya hice para otros negocios</h2>
+  <p class="svc-lead">Entrá y probalos: están online.</p>
 
   <article class="case-card reveal">
     <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="case-media" tabindex="-1" aria-hidden="true">
@@ -209,6 +258,7 @@
 <section id="paquetes" class="section">
   <p class="section-label">Paquetes</p>
   <h2 class="svc-title">Elegí por dónde empezar</h2>
+  <p class="svc-lead">Un precio claro para arrancar, que después ajustamos a lo que necesite tu negocio.</p>
   <p class="plan-launch">Precios de lanzamiento</p>
   <div class="plan-grid">
     <article class="plan-card reveal">
@@ -254,9 +304,10 @@
   <p class="plan-note"><strong>Mantenimiento mensual opcional, desde USD 20 por mes <mark class="plan-free">(el primer mes es gratis)</mark>:</strong> me ocupo del hosting, la configuración de tu dominio y los cambios menores (textos, fotos, horarios y precios), para que vos no tengas que pensar en nada de eso.</p>
 </section>
 
-<section id="como-trabajo" class="section">
-  <p class="section-label">Cómo trabajo</p>
+<section id="proceso" class="section">
+  <p class="section-label">Proceso</p>
   <h2 class="svc-title">Simple, en tres pasos</h2>
+  <p class="svc-lead">Sin vueltas técnicas: vos me contás cómo trabajás y yo me ocupo del resto.</p>
   <ol class="steps">
     <li class="step reveal">
       <span class="step-num">1</span>
@@ -281,7 +332,7 @@
 <section id="agendar" class="section">
   <p class="section-label">Agendá una charla</p>
   <h2 class="svc-title">Elegí día y horario</h2>
-  <p class="booking-intro">Videollamada de 30 minutos por Google Meet, sin cargo. Te llega la invitación a tu mail.</p>
+  <p class="svc-lead">Videollamada de 30 minutos por Google Meet, sin cargo. Te llega la invitación a tu mail.</p>
 
   <div class="booking" id="booking" data-fallback="https://calendar.app.google/uRAviZGoGXzYu63w9">
     <div id="bkPick">
@@ -373,6 +424,6 @@
   </symbol>
 </svg>
 
-<script src="/servicios/servicios.js?v=3"></script>
+<script src="/servicios/servicios.js?v=4"></script>
 </body>
 </html>
