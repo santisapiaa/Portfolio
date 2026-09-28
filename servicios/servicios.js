@@ -104,6 +104,20 @@ if (hero && !reduceMotion) {
   update();
 }
 
+// Hero title: the last words rotate (static for people who prefer reduced motion)
+const rotator = document.getElementById('heroRotator');
+if (rotator && !reduceMotion) {
+  const words = [...rotator.children];
+  let current = 0;
+  setInterval(() => {
+    const prev = words[current];
+    current = (current + 1) % words.length;
+    prev.classList.replace('is-active', 'is-leaving');
+    words[current].classList.add('is-active');
+    setTimeout(() => prev.classList.remove('is-leaving'), 450);
+  }, 2600);
+}
+
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section
 const WA_LINK = 'https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio';
 

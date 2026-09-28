@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=4">
-<link rel="stylesheet" href="/servicios/servicios.css?v=7">
+<link rel="stylesheet" href="/servicios/servicios.css?v=9">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -115,7 +115,10 @@
       <img src="/servicios/santiago.webp" alt="" width="44" height="44">
       <span>Santiago, desarrollador web · Buenos Aires</span>
     </p>
-    <h1>Páginas web para comercios que quieren recibir <span class="highlight">más turnos y clientes</span></h1>
+    <h1>Páginas web para comercios que quieren
+      <span class="rotator" id="heroRotator" aria-hidden="true"><span class="highlight is-active">más turnos</span><span class="highlight">más clientes</span><span class="highlight">menos mensajes</span><span class="highlight">aparecer en Google</span></span>
+      <span class="sr-only">recibir más turnos y clientes</span>
+    </h1>
     <p class="svc-hero-desc">Hago sitios y sistemas de turnos online para peluquerías, barberías, consultorios, centros de estética y kinesiólogos. Para que te encuentren en Google y te pidan turno sin que tengas que estar contestando mensajes todo el día.</p>
     <div class="svc-hero-actions">
       <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="btn-wa btn-wa-lg" data-wa="hero">
@@ -127,12 +130,19 @@
     <p class="svc-hero-note">Primera charla sin cargo y sin compromiso.</p>
   </div>
 
+  <div class="svc-visual">
+    <!-- Capturas reales en celulares: esta misma página (agenda) y Benedetto -->
+    <div class="phones">
+      <div class="phone phone-back"><img src="/servicios/phone-agenda.webp" alt="Agenda de charlas de esta página, vista en un celular" width="480" height="1039"></div>
+      <div class="phone phone-front"><img src="/servicios/phone-benedetto.webp" alt="Sitio de Benedetto Peluquería, visto en un celular" width="480" height="1039"></div>
+    </div>
+
   <!-- Agenda real: próximos horarios libres de Google Calendar -->
   <div class="svc-demo-wrap">
     <div class="svc-demo" id="heroAgenda">
       <div class="demo-head">
         <span class="demo-status"><span class="demo-dot"></span>Agenda abierta</span>
-        <span class="demo-day">30 min · Google Meet</span>
+        <span class="demo-day">30 min · Meet</span>
       </div>
       <p class="demo-title" id="heroTitle">Próximos horarios para charlar</p>
       <div id="heroDays" class="hero-days">
@@ -143,6 +153,7 @@
       <a href="#agendar" class="demo-cta" id="heroCta">Ver todos los horarios</a>
     </div>
     <p class="demo-note">Esta agenda es real: es el mismo sistema que puedo armar para tu negocio.</p>
+  </div>
   </div>
 </header>
 
@@ -424,6 +435,6 @@
   </symbol>
 </svg>
 
-<script src="/servicios/servicios.js?v=4"></script>
+<script src="/servicios/servicios.js?v=5"></script>
 </body>
 </html>
