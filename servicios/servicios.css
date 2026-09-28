@@ -422,8 +422,6 @@
 /* FOOTER */
 .svc-footer { padding-bottom: 96px; }
 .svc-footer p + p { margin-top: 8px; }
-.footer-link { color: var(--text-dim); border-bottom: 1px solid var(--border); }
-.footer-link:hover { color: var(--accent); border-color: var(--accent); }
 
 /* WHATSAPP FLOTANTE */
 .wa-float {
