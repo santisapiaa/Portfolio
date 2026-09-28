@@ -88,15 +88,13 @@
   color: var(--text-faint);
 }
 
-/* Ilustración de turnos */
+/* Agenda en vivo del hero */
+.svc-demo-wrap { width: 100%; max-width: 380px; justify-self: center; }
 .svc-demo {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 22px;
-  max-width: 380px;
-  width: 100%;
-  justify-self: center;
   box-shadow: 0 30px 60px -30px rgba(94, 234, 212, 0.25);
 }
 .demo-head {
@@ -124,6 +122,7 @@
   animation: blink 1.8s infinite;
 }
 .demo-title { font-weight: 600; font-size: 1.1rem; margin: 16px 0 12px; }
+.demo-text { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 14px; }
 .demo-pro { margin-bottom: 14px; }
 .demo-name { font-size: 0.85rem; color: var(--text-dim); }
 .demo-slots {
@@ -132,36 +131,56 @@
   gap: 6px;
   margin-top: 6px;
 }
-.demo-slots span {
+.demo-slots button {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  text-align: center;
-  padding: 7px 0;
+  padding: 8px 0;
   border-radius: 8px;
   border: 1px solid var(--accent-dim);
-  color: var(--accent);
-}
-.demo-slots span.picked { background: var(--accent); color: #06110e; }
-.demo-slots span.taken {
-  border-color: var(--border);
-  color: var(--text-faint);
-  text-decoration: line-through;
   background: none;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
+.demo-slots button:hover { background: var(--accent); color: #06110e; }
+.skel .demo-name {
+  display: block;
+  width: 90px;
+  border-radius: 6px;
+  background: var(--border);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.skel .demo-slots span {
+  height: 33px;
+  border-radius: 8px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: 0.45; } }
 .demo-cta {
-  margin-top: 6px;
+  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 11px;
   border-radius: 10px;
-  background: var(--wa);
-  color: #06110e;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
   font-weight: 600;
   font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
 }
+.demo-cta:hover { background: var(--accent); color: #06110e; }
 .demo-cta svg { width: 18px; height: 18px; }
+.demo-note {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
 
 /* SECCIONES */
 .svc .section { padding: 72px 20px; }
@@ -568,4 +587,41 @@
   .bk-fields { grid-template-columns: 1fr 1fr; }
   .bk-wide { grid-column: 1 / -1; }
   .bk-submit { width: auto; }
+}
+
+/* POPUP DE CONFIRMACIÓN */
+.bk-dialog {
+  margin: auto;
+  width: min(420px, calc(100% - 32px));
+  padding: 30px 24px 24px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.bk-dialog[open] { animation: pop 0.25s ease-out; }
+.bk-dialog::backdrop { background: rgba(5, 8, 12, 0.7); backdrop-filter: blur(4px); }
+@keyframes pop { from { opacity: 0; transform: scale(0.94); } }
+.bk-dialog-icon {
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.bk-dialog-icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.bk-dialog h3 { font-size: 1.4rem; margin-bottom: 10px; }
+.bk-dialog p { color: var(--text-dim); margin-bottom: 22px; }
+.bk-dialog p strong { color: var(--text); }
+.bk-dialog-actions { display: flex; flex-direction: column-reverse; gap: 10px; }
+.bk-dialog-actions .btn { text-align: center; border: none; cursor: pointer; font-family: inherit; }
+.bk-dialog-actions .btn-ghost { border: 1px solid var(--border); }
+@media (min-width: 480px) {
+  .bk-dialog-actions { flex-direction: row; justify-content: center; }
 }

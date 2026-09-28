@@ -36,21 +36,65 @@ if (!reduceMotion && 'IntersectionObserver' in window) {
   });
 }
 
-// Booking: free slots from Google Calendar (via /api) and the form that creates the Meet event
-const booking = document.getElementById('booking');
-if (booking) initBooking(booking);
+// Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section
+const WA_LINK = 'https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio';
+
+// Dates come as YYYY-MM-DD; format them at noon UTC so the day never shifts
+const asDate = d => new Date(`${d}T12:00:00Z`);
+const fmtDate = opts => new Intl.DateTimeFormat('es-AR', { ...opts, timeZone: 'UTC' });
+const shortDate = (d, opts) => fmtDate(opts).format(asDate(d)).replace('.', '');
+const longDate = d => { const s = fmtDate({ weekday: 'long', day: 'numeric', month: 'long' }).format(asDate(d)).replace(',', ''); return s[0].toUpperCase() + s.slice(1); };
+
+// One request shared by the hero and the booking section; `fresh` skips it after a conflict
+let daysRequest = null;
+function getDays(fresh) {
+  if (!daysRequest || fresh) {
+    daysRequest = fetch('/api/disponibilidad', fresh ? { cache: 'no-store' } : undefined)
+      .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(body => body.days);
+    daysRequest.catch(() => { daysRequest = null; });
+  }
+  return daysRequest;
+}
+
+const booking = document.getElementById('booking') && initBooking(document.getElementById('booking'));
+initHeroAgenda();
+
+function initHeroAgenda() {
+  const box = document.getElementById('heroDays');
+  if (!box) return;
+  const cta = document.getElementById('heroCta');
+
+  getDays().then(days => {
+    if (!days.length) throw new Error('empty');
+    box.innerHTML = days.slice(0, 3).map(d => `
+      <div class="demo-pro">
+        <span class="demo-name">${longDate(d.date)}</span>
+        <div class="demo-slots">${d.slots.slice(0, 4).map(t =>
+          `<button type="button" data-date="${d.date}" data-time="${t}" aria-label="${longDate(d.date)}, ${t} hs">${t}</button>`).join('')}</div>
+      </div>`).join('');
+  }).catch(() => {
+    document.getElementById('heroTitle').textContent = 'Coordinemos una charla';
+    box.innerHTML = '<p class="demo-text">Escribime y buscamos un horario que te quede cómodo.</p>';
+    cta.href = WA_LINK;
+    cta.target = '_blank';
+    cta.rel = 'noopener';
+    cta.dataset.wa = 'hero-agenda';
+    cta.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg>Escribime por WhatsApp';
+  });
+
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button[data-time]');
+    if (!b || !booking) return;
+    track('Hero Slot Click', { date: b.dataset.date });
+    booking.pick(b.dataset.date, b.dataset.time);
+  });
+}
 
 function initBooking(root) {
   const $ = id => document.getElementById(id);
   const daysEl = $('bkDays'), slotsEl = $('bkSlots'), form = $('bkForm'), statusEl = $('bkStatus');
-  const WA = 'https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio';
-  let days = [], selDate = null, selTime = null, loaded = false;
-
-  // Dates come as YYYY-MM-DD; format them at noon UTC so the day never shifts
-  const asDate = d => new Date(`${d}T12:00:00Z`);
-  const fmt = opts => new Intl.DateTimeFormat('es-AR', { ...opts, timeZone: 'UTC' });
-  const short = (d, opts) => fmt(opts).format(asDate(d)).replace('.', '');
-  const longDate = d => { const s = fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(asDate(d)).replace(',', ''); return s[0].toUpperCase() + s.slice(1); };
+  let days = [], selDate = null, selTime = null, loaded = null;
 
   function setStatus(html, isError) {
     statusEl.innerHTML = html;
@@ -58,15 +102,12 @@ function initBooking(root) {
   }
 
   function fallback(msg) {
-    setStatus(`${msg} Podés <a href="${root.dataset.fallback}" target="_blank" rel="noopener">agendar desde mi calendario de Google</a> o <a href="${WA}" target="_blank" rel="noopener" data-wa="agenda">escribirme por WhatsApp</a>.`, true);
+    setStatus(`${msg} Podés <a href="${root.dataset.fallback}" target="_blank" rel="noopener">agendar desde mi calendario de Google</a> o <a href="${WA_LINK}" target="_blank" rel="noopener" data-wa="agenda">escribirme por WhatsApp</a>.`, true);
   }
 
-  async function load() {
-    loaded = true;
+  async function load(fresh) {
     try {
-      const res = await fetch('/api/disponibilidad');
-      if (!res.ok) throw new Error(res.status);
-      days = (await res.json()).days;
+      days = await getDays(fresh);
     } catch {
       $('bkPick').hidden = true;
       fallback('No pude cargar los horarios en este momento.');
@@ -83,12 +124,14 @@ function initBooking(root) {
     selectDate(days.some(d => d.date === selDate) ? selDate : days[0].date);
   }
 
+  const ensureLoaded = () => (loaded ||= load());
+
   function renderDays() {
     daysEl.innerHTML = days.map(d => `
       <button type="button" class="bk-day" data-date="${d.date}" aria-pressed="false" aria-label="${longDate(d.date)}">
-        <span class="wd">${short(d.date, { weekday: 'short' })}</span>
+        <span class="wd">${shortDate(d.date, { weekday: 'short' })}</span>
         <span class="dn">${asDate(d.date).getUTCDate()}</span>
-        <span class="mo">${short(d.date, { month: 'short' })}</span>
+        <span class="mo">${shortDate(d.date, { month: 'short' })}</span>
       </button>`).join('');
   }
 
@@ -104,13 +147,13 @@ function initBooking(root) {
     slotsEl.innerHTML = group('Mañana', slots.filter(t => t < '13:00')) + group('Tarde', slots.filter(t => t >= '13:00'));
   }
 
-  function selectTime(time) {
+  function selectTime(time, block = 'nearest') {
     selTime = time;
     slotsEl.querySelectorAll('.bk-slot').forEach(b => b.setAttribute('aria-pressed', b.dataset.time === time));
     $('bkSelected').innerHTML = `${longDate(selDate)} · <span>${time} hs</span>`;
     form.hidden = false;
     setStatus('');
-    form.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    form.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block });
   }
 
   daysEl.addEventListener('click', e => { const b = e.target.closest('.bk-day'); if (b) selectDate(b.dataset.date); });
@@ -133,6 +176,30 @@ function initBooking(root) {
     setStatus(FIELD_ERRORS[name], true);
   }
 
+  // Confirmation popup
+  const dialog = $('bkDialog');
+  $('bkDialogClose').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); }); // click on the backdrop
+
+  function confirmBooking(data, meet) {
+    const when = `${longDate(selDate).toLowerCase()} a las ${selTime} hs`;
+    const email = escapeHtml(data.email);
+
+    $('bkPick').hidden = true;
+    form.hidden = true;
+    const done = $('bkDone');
+    done.innerHTML = `<h3>¡Listo, ${escapeHtml(data.nombre)}!</h3>
+      <p>Agendamos la charla para el <strong>${when}</strong>. Te mandé la invitación con el link de Meet a <strong>${email}</strong>. Si necesitás cambiar el horario, respondé ese mail o <a href="${WA_LINK}" target="_blank" rel="noopener" data-wa="agenda">escribime por WhatsApp</a>.</p>`;
+    done.hidden = false;
+
+    $('bkDialogText').innerHTML = `Nos vemos el <strong>${when}</strong>. Te llegó la invitación a <strong>${email}</strong> con el link de Google Meet (si no la ves, revisá spam).`;
+    const meetBtn = $('bkDialogMeet');
+    meetBtn.hidden = !meet;
+    if (meet) meetBtn.href = meet;
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else done.scrollIntoView({ block: 'center' });
+  }
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const firstInvalid = [...form.querySelectorAll('input[required]')].find(i => !i.checkValidity());
@@ -152,17 +219,12 @@ function initBooking(root) {
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok) {
-        $('bkPick').hidden = true;
-        form.hidden = true;
-        const done = $('bkDone');
-        done.innerHTML = `<h3>¡Listo, ${escapeHtml(data.nombre)}!</h3>
-          <p>Agendamos la charla para el <strong>${longDate(selDate).toLowerCase()} a las ${selTime} hs</strong>. Te mandé la invitación con el link de Meet a <strong>${escapeHtml(data.email)}</strong>. Si necesitás cambiar el horario, respondé ese mail o <a href="${WA}" target="_blank" rel="noopener" data-wa="agenda">escribime por WhatsApp</a>.</p>`;
-        done.hidden = false;
+        confirmBooking(data, body.meet);
         track('Booking', { date: selDate });
         return;
       }
       if (res.status === 409) {
-        await load();
+        await load(true);
         if (!$('bkPick').hidden) setStatus('Ese horario se acaba de ocupar. Elegí otro, por favor.', true);
         return;
       }
@@ -176,15 +238,29 @@ function initBooking(root) {
     }
   });
 
-  // Only ask for availability when the section gets close, so every visit doesn't hit the calendar
+  // The hero already asked for the slots, so this usually resolves right away
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
-      if (entries.some(en => en.isIntersecting) && !loaded) { io.disconnect(); load(); }
+      if (entries.some(en => en.isIntersecting)) { io.disconnect(); ensureLoaded(); }
     }, { rootMargin: '600px 0px' });
     io.observe(root);
   } else {
-    load();
+    ensureLoaded();
   }
+
+  return {
+    // Called from the hero: open that day and time, ready to fill in the form
+    async pick(date, time) {
+      await ensureLoaded();
+      if (!days.some(d => d.date === date && d.slots.includes(time))) {
+        root.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+        return;
+      }
+      selectDate(date);
+      selectTime(time, 'center');
+      setTimeout(() => form.elements.nombre.focus({ preventScroll: true }), reduceMotion ? 0 : 500);
+    }
+  };
 }
 
 function escapeHtml(s) {
