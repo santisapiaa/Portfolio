@@ -483,6 +483,15 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 .case-info h3 { font-size: 1.45rem; margin: 6px 0 10px; }
 .case-info > p { color: var(--text-dim); margin-bottom: 16px; }
+.case-info > p.case-note {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-left: 2px solid var(--gold);
+  background: var(--bg-alt);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.88rem;
+}
+.case-note strong { color: var(--text); }
 .case-link {
   display: inline-block;
   margin-top: 18px;
