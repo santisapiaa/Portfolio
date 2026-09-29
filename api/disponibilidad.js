@@ -1,19 +1,15 @@
 // GET /api/disponibilidad → { days: [{ date: 'YYYY-MM-DD', slots: ['10:00', …] }] }
-const { config, availableDays } = require('./_agenda');
+const { readCalendarConfig, availableDays } = require('./_agenda');
+const { sendError, calendarEndpoint } = require('./_http');
 
-module.exports = async (req, res) => {
-  if (req.method !== 'GET') return res.status(405).json({ error: 'method_not_allowed' });
+// Un minuto de caché en el CDN; /api/agendar vuelve a chequear el horario antes de reservar.
+const CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=60';
 
-  const cfg = config();
-  if (!cfg) return res.status(503).json({ error: 'not_configured' });
+module.exports = calendarEndpoint('GET', 'disponibilidad', async (req, res) => {
+  const cfg = readCalendarConfig();
+  if (!cfg) return sendError(res, 503, 'not_configured');
 
-  try {
-    const days = await availableDays(cfg);
-    // Un minuto de caché en el CDN; /api/agendar vuelve a chequear el horario antes de reservar.
-    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=60');
-    return res.status(200).json({ days });
-  } catch (err) {
-    console.error('[disponibilidad]', err);
-    return res.status(502).json({ error: 'calendar_unavailable' });
-  }
-};
+  const days = await availableDays(cfg);
+  res.setHeader('Cache-Control', CACHE_CONTROL);
+  return res.status(200).json({ days });
+});
