@@ -52,19 +52,19 @@
 <script>
   // Match the language the visitor picked on the portfolio
   const texts = {
-    en: ['Page not found', "This page doesn't exist", 'The link may be mistyped or the page may have moved.', 'Back to home', 'en'],
-    pt: ['Página não encontrada', 'Esta página não existe', 'O link pode estar errado ou a página pode ter sido movida.', 'Voltar ao início', 'pt-BR']
+    en: { title: 'Page not found', heading: "This page doesn't exist", desc: 'The link may be mistyped or the page may have moved.', button: 'Back to home', htmlLang: 'en' },
+    pt: { title: 'Página não encontrada', heading: 'Esta página não existe', desc: 'O link pode estar errado ou a página pode ter sido movida.', button: 'Voltar ao início', htmlLang: 'pt-BR' }
   };
   let lang = null;
   try { lang = localStorage.getItem('lang'); } catch {}
   if (!lang) lang = (navigator.language || 'es').slice(0, 2);
   const t = texts[lang];
   if (t) {
-    document.title = t[0] + ' — Santiago Sapia';
-    document.getElementById('nf-title').textContent = t[1];
-    document.getElementById('nf-desc').textContent = t[2];
-    document.getElementById('nf-btn').textContent = t[3];
-    document.documentElement.lang = t[4];
+    document.title = t.title + ' — Santiago Sapia';
+    document.getElementById('nf-title').textContent = t.heading;
+    document.getElementById('nf-desc').textContent = t.desc;
+    document.getElementById('nf-btn').textContent = t.button;
+    document.documentElement.lang = t.htmlLang;
   }
 </script>
 </body>
