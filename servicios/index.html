@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=4">
-<link rel="stylesheet" href="/servicios/servicios.css?v=11">
+<link rel="stylesheet" href="/servicios/servicios.css?v=12">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -418,20 +418,61 @@
   </div>
 </section>
 
-<section id="contacto" class="section svc-cta">
-  <h2>¿Hablamos de tu negocio?</h2>
-  <p>Contame qué necesitás y te armo una propuesta a medida. La primera charla no tiene costo ni compromiso.</p>
-  <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="btn-wa btn-wa-lg" data-wa="cierre">
-    <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg>
-    Escribime por WhatsApp
-  </a>
-  <p class="svc-cta-alt">¿Preferís una videollamada? <a href="#agendar">Elegí un horario</a></p>
+<section id="contacto" class="section">
+  <p class="section-label">Contacto</p>
+  <h2 class="svc-title">Por donde prefieras</h2>
+  <p class="svc-lead">Todas llegan a mí. La primera charla es sin cargo.</p>
+
+  <div class="contact-wrap">
+    <div class="contact-list">
+      <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="c-card c-card-main" data-wa="contacto" aria-label="WhatsApp: escribime y te respondo en el día (se abre en una pestaña nueva)">
+        <span class="c-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg></span>
+        <span class="c-body"><span class="c-title">WhatsApp</span><span class="c-desc">Escribime y te respondo en el día</span></span>
+        <span class="c-action"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+      </a>
+      <a href="#agendar" class="c-card" aria-label="Videollamada: agendá una charla de 30 minutos, sin cargo">
+        <span class="c-icon"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><path d="m16 13 5.22 3.48a.5.5 0 0 0 .78-.42V7.87a.5.5 0 0 0-.75-.43L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span>
+        <span class="c-body"><span class="c-title">Videollamada</span><span class="c-desc">Agendá una charla de 30 min, sin cargo</span></span>
+        <span class="c-action"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span>
+      </a>
+      <a href="https://www.instagram.com/santiagosapia.dev/" target="_blank" rel="noopener noreferrer" class="c-card" data-contact="instagram" aria-label="Instagram: @santiagosapia.dev (se abre en una pestaña nueva)">
+        <span class="c-icon"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg></span>
+        <span class="c-body"><span class="c-title">Instagram</span><span class="c-desc">@santiagosapia.dev</span></span>
+        <span class="c-action"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+      </a>
+      <div class="c-card c-card-mail">
+        <a href="mailto:sapiasantiagoo@gmail.com" class="c-link" data-contact="email" aria-label="Mail: escribime a sapiasantiagoo@gmail.com">
+          <span class="c-icon"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <span class="c-body"><span class="c-title">Mail</span><span class="c-desc">sapiasantiagoo@<wbr>gmail.com</span></span>
+        </a>
+        <button type="button" class="c-action c-copy" id="copyMail" data-mail="sapiasantiagoo@gmail.com" aria-label="Copiar mail"><svg class="i-line i-copy" aria-hidden="true" viewBox="0 0 24 24"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><svg class="i-line i-check" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></button>
+        <span class="c-toast" id="copyToast" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="wa-box">
+      <h3>Escribime por WhatsApp</h3>
+      <p id="waBoxText">Contame en pocas palabras qué necesitás. Se abre WhatsApp con tu mensaje ya escrito y lo mandás vos.</p>
+      <label class="sr-only" for="waMsg">Tu mensaje</label>
+      <textarea id="waMsg" rows="4" maxlength="500" aria-describedby="waBoxText waNote" placeholder="Tengo una peluquería y quiero que mis clientes vean los horarios libres."></textarea>
+      <p class="wa-note" id="waNote">Si lo dejás vacío, igual se abre el chat.</p>
+      <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="btn-wa wa-send" id="waSend" data-wa="contacto_form">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg>
+        Abrir WhatsApp
+      </a>
+    </div>
+  </div>
 </section>
 
 </main>
 
 <footer class="svc-footer">
   <p>Santiago Sapia · Desarrollo web para comercios · Buenos Aires · <span id="year"></span></p>
+  <ul class="footer-contact">
+    <li><a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tu%20p%C3%A1gina%20y%20quiero%20consultar%20por%20una%20web%20para%20mi%20negocio" target="_blank" rel="noopener" class="footer-link" data-wa="footer"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#wa-icon"/></svg><span>+54 9 11 6642-9749</span></a></li>
+    <li><a href="mailto:sapiasantiagoo@gmail.com" class="footer-link" data-contact="email_footer"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span>sapiasantiagoo@gmail.com</span></a></li>
+    <li><a href="https://www.instagram.com/santiagosapia.dev/" target="_blank" rel="noopener noreferrer" class="footer-link" data-contact="instagram_footer"><svg class="i-line" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg><span>@santiagosapia.dev</span></a></li>
+  </ul>
   <p><a href="/" class="footer-link">Ver mi portfolio</a> · <a href="/privacidad" class="footer-link">Privacidad</a> · <a href="/terminos" class="footer-link">Términos</a></p>
 </footer>
 

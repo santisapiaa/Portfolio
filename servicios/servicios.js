@@ -14,6 +14,10 @@ document.addEventListener('click', e => {
     track('WhatsApp Click', { location: a.dataset.wa });
     return;
   }
+  if (a.dataset.contact) {
+    track('Contact Click', { method: a.dataset.contact });
+    return;
+  }
   const card = a.closest('.case-card');
   if (card) track('Case Click', { project: card.querySelector('h3').textContent.trim() });
 });
@@ -177,6 +181,9 @@ function getDays(fresh) {
 const bookingRoot = document.getElementById('booking');
 const booking = bookingRoot && initBooking(bookingRoot);
 initHeroAgenda();
+// Called here and not at the top: they use WA_LINK, which is declared above
+initCopyMail();
+initWhatsAppBox();
 
 function initHeroAgenda() {
   const box = document.getElementById('heroDays');
@@ -404,4 +411,62 @@ function initBooking(root) {
       setTimeout(() => form.elements.nombre.focus({ preventScroll: true }), reduceMotion ? 0 : NAME_FOCUS_DELAY_MS);
     }
   };
+}
+
+// Contact: copy the mail without opening the mail app
+function initCopyMail() {
+  const COPIED_MS = 2000;
+  const FAILED_MS = 5000;
+  const TOAST_FADE_MS = 200;
+  const copyBtn = document.getElementById('copyMail');
+  if (!copyBtn) return;
+  const toast = document.getElementById('copyToast');
+  let toastTimer;
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Older browsers or blocked clipboard permission
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.append(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  copyBtn.addEventListener('click', async e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const mail = copyBtn.dataset.mail;
+    const ok = await copyText(mail);
+    toast.textContent = ok ? '¡Copiado!' : `Copialo: ${mail}`;
+    toast.classList.add('is-visible');
+    copyBtn.classList.toggle('is-copied', ok);
+    if (ok) track('Contact Click', { method: 'email_copy' });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('is-visible');
+      copyBtn.classList.remove('is-copied');
+      setTimeout(() => { toast.textContent = ''; }, TOAST_FADE_MS);
+    }, ok ? COPIED_MS : FAILED_MS);
+  });
+}
+
+// Contact: WhatsApp box, the link carries whatever the visitor typed (or the usual message if empty)
+function initWhatsAppBox() {
+  const waMsg = document.getElementById('waMsg');
+  if (!waMsg) return;
+  const waSend = document.getElementById('waSend');
+  waMsg.addEventListener('input', () => {
+    const text = waMsg.value.trim();
+    waSend.href = text ? `https://wa.me/5491166429749?text=${encodeURIComponent(text)}` : WA_LINK;
+  });
 }

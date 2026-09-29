@@ -660,21 +660,137 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 .faq details p { padding: 0 20px 20px; color: var(--text-dim); }
 
 /* CIERRE */
-.svc-cta { text-align: center; }
-.svc-cta h2 {
-  font-size: clamp(1.8rem, 6vw, 2.6rem);
-  line-height: 1.15;
-  margin-bottom: 14px;
+/* CONTACTO: tarjetas por canal + recuadro para escribir por WhatsApp */
+.contact-wrap { display: grid; gap: 20px; }
+.contact-list { display: grid; gap: 12px; }
+.i-line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.c-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 16px 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
-.svc-cta p {
+.c-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -18px rgba(94, 234, 212, 0.45);
+}
+.c-card-main { border-color: var(--accent-dim); }
+/* La tarjeta del mail no es un link en sí: muestra el foco del link que tiene adentro */
+.c-card-mail:has(.c-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.c-link { flex: 1; display: flex; align-items: center; gap: 16px; min-width: 0; color: inherit; }
+.c-link:focus-visible { outline: none; }
+.c-link::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.c-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.c-icon svg { width: 22px; height: 22px; }
+.c-body { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.c-title { font-weight: 600; font-size: 1.02rem; }
+.c-desc { color: var(--text-dim); font-size: 0.92rem; overflow-wrap: break-word; }
+.c-action {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   color: var(--text-dim);
-  max-width: 48ch;
-  margin: 0 auto 30px;
+  transition: color 0.2s, background 0.2s;
 }
+.c-action svg { width: 18px; height: 18px; }
+.c-card:hover .c-action { color: var(--accent); }
+.c-copy {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  cursor: pointer;
+}
+.c-copy:hover { background: var(--accent-soft); color: var(--accent); }
+.c-copy .i-check { display: none; }
+.c-copy.is-copied { color: var(--accent); border-color: var(--accent-dim); }
+.c-copy.is-copied .i-copy { display: none; }
+.c-copy.is-copied .i-check { display: block; }
+.c-toast {
+  position: absolute;
+  top: -12px;
+  right: 12px;
+  z-index: 2;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #06110e;
+  font-size: 0.78rem;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.c-toast.is-visible { opacity: 1; transform: none; }
+.c-toast:empty { padding: 0; }
+
+.wa-box {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.wa-box h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.wa-box > p { color: var(--text-dim); font-size: 0.95rem; }
+.wa-box textarea {
+  margin-top: 16px;
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  font: inherit;
+  font-size: 1rem; /* 16px evita el zoom automático en iPhone */
+  color: var(--text);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.2s;
+}
+.wa-box textarea::placeholder { color: var(--text-faint); }
+.wa-box textarea:focus { outline: none; border-color: var(--accent); }
+.wa-box .wa-note { margin: 8px 0 18px; font-size: 0.85rem; color: var(--text-dim); }
+.wa-send { margin-top: auto; }
 
 /* FOOTER */
 .svc-footer { padding-bottom: 96px; }
 .svc-footer p + p { margin-top: 8px; }
+.footer-contact {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+}
+.footer-contact a { display: inline-flex; align-items: center; gap: 8px; border-bottom: none; }
+.footer-contact a span { border-bottom: 1px solid var(--border); transition: border-color 0.2s; }
+.footer-contact a:hover span { border-color: var(--accent); }
+.footer-contact svg { width: 15px; height: 15px; flex: none; }
+.footer-contact .i-line { stroke-width: 2.2; }
 
 /* WHATSAPP FLOTANTE */
 .wa-float {
@@ -715,6 +831,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 
 /* TABLET */
 @media (min-width: 640px) {
+  .footer-contact { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px 24px; }
   .svc-hero-actions { flex-direction: row; flex-wrap: wrap; }
   .problem-grid { grid-template-columns: 1fr 1fr; }
   .case-card { padding: 26px; }
@@ -733,6 +850,8 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .svc-demo-wrap { transform: translateY(calc(var(--hp, 0) * -170px)) rotate(calc(var(--hp, 0) * -2deg)); }
   .svc .section { padding: 128px 24px; }
   .service-grid { grid-template-columns: repeat(3, 1fr); }
+  .contact-wrap { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+  .wa-box { padding: 28px; }
   .case-card { grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; padding: 28px; }
   .case-card:nth-of-type(even) .case-media { order: 2; }
   .plan-grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
@@ -748,8 +867,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   color: var(--accent);
 }
 .step-link:hover { text-decoration: underline; }
-.svc-cta-alt { margin: 18px auto 0; font-size: 0.95rem; }
-.svc-cta-alt a { color: var(--accent); font-weight: 600; border-bottom: 1px solid var(--accent-dim); }
 
 .booking {
   background: var(--surface);
