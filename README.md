@@ -27,6 +27,14 @@ LinkedIn y está deployado en Vercel.
 ├── script.js                menú mobile, selector de idioma, efecto de texto y animaciones
 ├── i18n.js                  traducciones al inglés y portugués
 ├── 404.html                 página de error con el estilo del sitio
+├── servicios/               página /servicios (agenda de charlas con horarios de Google Calendar)
+├── privacidad/ · terminos/  política de privacidad y términos (legal.css)
+├── api/                     funciones serverless de Vercel para la agenda
+│   ├── disponibilidad.js    GET: horarios libres
+│   ├── agendar.js           POST: valida el pedido y crea el evento con link de Meet
+│   ├── _agenda.js           reglas de la agenda (horarios de atención, feriados, anticipación)
+│   ├── _google-calendar.js  cliente OAuth + Calendar API, sin dependencias
+│   └── _http.js             utilidades compartidas (mismo origen, errores)
 ├── robots.txt / sitemap.xml para buscadores
 ├── favicon.svg / .ico     ícono del sitio (también en assets/favicon-*.png)
 ├── Santiago_Sapia_CV.pdf    CV en español
