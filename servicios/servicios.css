@@ -32,8 +32,9 @@
   padding: 18px 24px;
   border: 1px solid transparent;
   border-radius: 20px;
-  transition: max-width 0.45s ease, margin 0.45s ease, padding 0.45s ease, background 0.45s ease,
-    border-color 0.45s ease, box-shadow 0.45s ease, backdrop-filter 0.45s ease;
+  transition: max-width 300ms var(--ease-in-out), margin 300ms var(--ease-in-out), padding 300ms var(--ease-in-out),
+    background 300ms var(--ease-in-out), border-color 300ms var(--ease-in-out), box-shadow 300ms var(--ease-in-out),
+    backdrop-filter 300ms var(--ease-in-out);
 }
 .svc-nav.is-scrolled .nav-inner {
   max-width: min(880px, calc(100% - 24px));
@@ -70,9 +71,9 @@
   color: #06110e;
   font-weight: 700;
   font-size: 0.9rem;
-  transition: background 0.2s, transform 0.2s;
+  transition: background-color 0.2s ease, transform 160ms var(--ease-out);
 }
-.nav-wa:hover { background: var(--gold); transform: translateY(-1px); }
+.nav-wa:hover { background: var(--gold); }
 .nav-wa svg { width: 18px; height: 18px; }
 
 /* Botón hamburguesa (solo celular): dos rayas que se cruzan en una X */
@@ -133,8 +134,8 @@
   color: var(--text);
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.4s ease, transform 0.4s ease, color 0.2s;
-  transition-delay: calc(var(--i) * 60ms + 80ms);
+  transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out), color 0.2s;
+  transition-delay: calc(var(--i) * 40ms + 40ms);
 }
 .m-link span { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--accent); }
 .m-link[aria-current="true"] { color: var(--accent); }
@@ -155,9 +156,9 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   color: #06110e;
   font-weight: 700;
   font-size: 1rem;
-  transition: background 0.2s, transform 0.2s;
+  transition: background-color 0.2s ease, transform 160ms var(--ease-out);
 }
-.btn-wa:hover { background: var(--gold); transform: translateY(-2px); }
+.btn-wa:hover { background: var(--gold); }
 .btn-wa svg { width: 22px; height: 22px; flex-shrink: 0; }
 .btn-wa-lg { padding: 17px 30px; font-size: 1.08rem; }
 
@@ -205,12 +206,12 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 /* Entrada al cargar: el texto aparece escalonado y la agenda sube */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } }
 @keyframes riseIn { from { opacity: 0; transform: translateY(70px) rotate(-3deg) scale(0.96); } }
-.svc-hero-text > * { animation: fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.svc-hero-text > * { animation: fadeUp 0.7s var(--ease-out) both; }
 .svc-hero-text > :nth-child(2) { animation-delay: 0.1s; }
 .svc-hero-text > :nth-child(3) { animation-delay: 0.2s; }
 .svc-hero-text > :nth-child(4) { animation-delay: 0.3s; }
 .svc-hero-text > :nth-child(5) { animation-delay: 0.4s; }
-.svc-demo-wrap > * { animation: riseIn 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both; }
+.svc-demo-wrap > * { animation: riseIn 0.9s var(--ease-out) 0.3s both; }
 .svc-intro {
   display: flex;
   align-items: center;
@@ -321,7 +322,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   background: none;
   color: var(--accent);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, transform 140ms var(--ease-out);
 }
 .demo-slots button:hover { background: var(--accent); color: #06110e; }
 .skel .demo-name {
@@ -473,7 +474,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   display: block;
   transition: transform 0.5s ease;
 }
-.case-card:hover .case-media img { transform: scale(1.03); }
 .case-tag {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -658,6 +658,15 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 .faq details[open] summary::after { content: '−'; }
 .faq details p { padding: 0 20px 20px; color: var(--text-dim); }
+/* La respuesta se despliega en vez de saltar (donde el navegador lo soporta; si no, abre como siempre) */
+.faq { interpolate-size: allow-keywords; }
+.faq details::details-content {
+  height: 0;
+  opacity: 0;
+  overflow: clip;
+  transition: height 250ms var(--ease-out), opacity 250ms var(--ease-out), content-visibility 250ms allow-discrete;
+}
+.faq details[open]::details-content { height: auto; opacity: 1; }
 
 /* CIERRE */
 /* CONTACTO: tarjetas por canal + recuadro para escribir por WhatsApp */
@@ -674,11 +683,10 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
-  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  transition: border-color 0.2s ease, transform 200ms var(--ease-out), box-shadow 0.2s ease;
 }
 .c-card:hover {
   border-color: var(--accent);
-  transform: translateY(-3px);
   box-shadow: 0 14px 30px -18px rgba(94, 234, 212, 0.45);
 }
 .c-card-main { border-color: var(--accent-dim); }
@@ -732,6 +740,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   border: 1px solid var(--border);
   background: var(--bg-alt);
   cursor: pointer;
+  transition: color 0.2s, background 0.2s, transform 140ms var(--ease-out);
 }
 .c-copy:hover { background: var(--accent-soft); color: var(--accent); }
 .c-copy .i-check { display: none; }
@@ -823,16 +832,16 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   background: var(--wa);
   color: #fff;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-  transition: transform 0.2s, background 0.2s;
+  transition: transform 160ms var(--ease-out), background-color 0.2s ease;
 }
-.wa-float:hover { background: var(--wa-hover); transform: scale(1.06); }
+.wa-float:hover { background: var(--wa-hover); }
 .wa-float svg { width: 30px; height: 30px; }
 
 /* ANIMACIÓN DE ENTRADA (la activa servicios.js) */
 .reveal-init {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(16px);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
 }
 .reveal-init.is-visible { opacity: 1; transform: none; }
 
@@ -925,7 +934,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   color: var(--text);
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 140ms var(--ease-out);
 }
 .bk-day:hover { border-color: var(--accent-dim); }
 .bk-day[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
@@ -947,7 +956,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   font-family: var(--font-mono);
   font-size: 0.88rem;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 140ms var(--ease-out);
 }
 .bk-slot:hover { border-color: var(--accent-dim); color: var(--accent); }
 .bk-slot[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #06110e; }
@@ -998,9 +1007,28 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   color: var(--text);
   text-align: center;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  /* Cerrado: es también el estado hacia el que sale, más rápido de lo que entra */
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 150ms var(--ease-out), transform 150ms var(--ease-out),
+    overlay 150ms allow-discrete, display 150ms allow-discrete;
 }
-.bk-dialog[open] { animation: pop 0.25s ease-out; }
-.bk-dialog::backdrop { background: rgba(5, 8, 12, 0.7); backdrop-filter: blur(4px); }
+.bk-dialog[open] { opacity: 1; transform: none; transition-duration: 220ms; }
+.bk-dialog::backdrop {
+  background: rgba(5, 8, 12, 0.7);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 150ms var(--ease-out), overlay 150ms allow-discrete, display 150ms allow-discrete;
+}
+.bk-dialog[open]::backdrop { opacity: 1; transition-duration: 220ms; }
+@starting-style {
+  .bk-dialog[open] { opacity: 0; transform: scale(0.94); }
+  .bk-dialog[open]::backdrop { opacity: 0; }
+}
+/* Navegadores sin @starting-style: se mantiene la entrada con keyframes */
+@supports not (transition-behavior: allow-discrete) {
+  .bk-dialog[open] { animation: pop 220ms var(--ease-out); }
+}
 @keyframes pop { from { opacity: 0; transform: scale(0.94); } }
 .bk-dialog-icon {
   display: inline-flex;
@@ -1022,4 +1050,27 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 .bk-dialog-actions .btn-ghost { border: 1px solid var(--border); }
 @media (min-width: 480px) {
   .bk-dialog-actions { flex-direction: row; justify-content: center; }
+}
+
+/* PRESIÓN: lo que se aprieta se achica apenas, para confirmar el toque */
+@media (prefers-reduced-motion: no-preference) {
+  .btn-wa:active,
+  .nav-wa:active { transform: scale(0.97); }
+  .demo-slots button:active,
+  .bk-day:active,
+  .bk-slot:active,
+  .c-copy:active { transform: scale(0.96); }
+  .wa-float:active { transform: scale(0.95); }
+}
+
+/* ELEVACIÓN AL PASAR EL CURSOR: solo con mouse, así en pantallas táctiles no queda pegada */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .nav-wa:hover { transform: translateY(-1px); }
+  .btn-wa:hover { transform: translateY(-2px); }
+  .nav-wa:active,
+  .btn-wa:active { transform: translateY(0) scale(0.97); }
+  .case-card:hover .case-media img { transform: scale(1.03); }
+  .c-card:hover { transform: translateY(-3px); }
+  .wa-float:hover { transform: scale(1.06); }
+  .wa-float:active { transform: scale(0.95); }
 }

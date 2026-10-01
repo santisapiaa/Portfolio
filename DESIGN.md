@@ -124,7 +124,7 @@ El sistema rechaza tres cosas: la plantilla de agencia con ilustraciones de stoc
 - Un acento frío (Aguamarina) y un acento cálido escaso (Miel).
 - Monoespaciada para todo lo que es etiqueta, dato o estado.
 - Píldoras para acciones y chips; esquinas suaves para tarjetas.
-- Movimiento corto que responde a la interacción y se apaga con `prefers-reduced-motion`.
+- Movimiento corto que responde a la interacción; con `prefers-reduced-motion` queda solo el cambio suave de color y opacidad.
 
 ## Colors
 
@@ -256,7 +256,16 @@ Una línea vertical de 1px con puntos Aguamarina de 9px rodeados por un anillo d
 La pieza distintiva de `/servicios`. Los días son tarjetas angostas en una fila que se desliza, con el día de la semana en mono y el número grande. Los horarios son una grilla de botones mono de 8px de radio. El día elegido toma borde Aguamarina y fondo de velo; el horario elegido se rellena entero de Aguamarina. Mientras carga muestra bloques que laten, y al confirmar abre un diálogo centrado con un ícono circular.
 
 ### Motion
-Transiciones de 0.2s a 0.25s para hover, 0.45s para la navegación y el título rotativo, 0.6s para la entrada de secciones al hacer scroll. El hero de `/servicios` entra escalonado con `cubic-bezier(0.2, 0.7, 0.2, 1)` y tiene tres luces de fondo que derivan entre 18s y 27s. El cursor y los puntos de estado parpadean. Todo se desactiva con `prefers-reduced-motion`.
+Dos curvas, definidas como variables en `style.css`: `--ease-out` (`cubic-bezier(0.23, 1, 0.32, 1)`) para todo lo que entra, se levanta o se aprieta, y `--ease-in-out` (`cubic-bezier(0.77, 0, 0.175, 1)`) para lo que cambia de forma en pantalla, como la navegación de `/servicios`. Los cambios de color, borde y sombra usan `ease` en 0.2s.
+
+- **Presión:** todo lo que se aprieta se achica al tocarlo. Botones a `scale(0.97)` en 160ms; días, horarios y el botón de copiar a `scale(0.96)` en 140ms; el botón flotante de WhatsApp a `scale(0.95)`. El botón principal además baja de su elevación.
+- **Hover:** las tarjetas suben entre 3px y 4px y los botones 2px, en 200ms y 160ms. La elevación solo existe con mouse (`hover: hover` y `pointer: fine`); en pantallas táctiles queda el cambio de color y borde.
+- **Menús y diálogo:** el menú de idiomas crece desde su botón (`scale(0.97)`, 150ms) y el menú móvil del portfolio baja 8px en 200ms. El diálogo de la agenda entra desde `scale(0.94)` en 220ms y sale más rápido, en 150ms. Las preguntas frecuentes despliegan su altura en 250ms donde el navegador lo soporta.
+- **Entradas:** las secciones suben 16px en 500ms al hacer scroll. El menú móvil de `/servicios` entra escalonado cada 40ms, en 300ms. El hero de `/servicios` entra escalonado en 0.7s a 0.9s y tiene tres luces de fondo que derivan entre 18s y 27s.
+- **Navegación de `/servicios`:** se contrae en píldora en 300ms; el título rotativo cambia en 0.45s.
+- **Constantes:** el cursor y los puntos de estado parpadean.
+
+**Regla del Movimiento Reducido.** Con `prefers-reduced-motion` no se mueve nada: sin animaciones, sin elevación, sin presión y sin entradas. Se conservan las transiciones de color, borde, sombra y opacidad, porque ayudan a entender el cambio de estado.
 
 ## Do's and Don'ts
 
@@ -267,7 +276,9 @@ Transiciones de 0.2s a 0.25s para hover, 0.45s para la navegación y el título 
 - **Do** hacer píldora (999px) todo lo que se aprieta o etiqueta, y usar 14px para tarjetas.
 - **Do** pintar entero el estado seleccionado: relleno Aguamarina con Tinta sobre Acento.
 - **Do** mantener el foco de teclado visible: contorno de 2px en Aguamarina a 3px.
-- **Do** respetar `prefers-reduced-motion` en cualquier animación nueva y mantener 44px de área táctil en íconos.
+- **Do** dar a todo lo que se aprieta un estado de presión (`scale(0.97)`, 160ms) y usar `--ease-out` para cualquier movimiento nuevo.
+- **Do** poner las elevaciones de hover dentro de `@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)`.
+- **Do** respetar `prefers-reduced-motion` en cualquier animación nueva (sin movimiento, solo color y opacidad) y mantener 44px de área táctil en íconos.
 
 ### Don't:
 - **Don't** agregar un tema claro ni superficies blancas.

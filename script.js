@@ -200,13 +200,21 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 // Scroll-reveal for sections
 const REVEAL_SELECTOR = '.project-card, .skill-card, .stat-card, .timeline-item';
-const REVEAL_OFFSET = 'translateY(24px)';
+const REVEAL_OFFSET = 'translateY(16px)';
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
+      const el = entry.target;
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+      observer.unobserve(el);
+      // Once revealed, drop the inline styles so the CSS hover/press transitions apply again
+      el.addEventListener('transitionend', function done(e) {
+        if (e.target !== el || e.propertyName !== 'transform') return;
+        el.removeEventListener('transitionend', done);
+        el.style.opacity = el.style.transform = el.style.transition = '';
+      });
     }
   });
 }, { threshold: 0.1 });
@@ -214,6 +222,6 @@ const observer = new IntersectionObserver((entries) => {
 if (!reduceMotion) document.querySelectorAll(REVEAL_SELECTOR).forEach(el => {
   el.style.opacity = '0';
   el.style.transform = REVEAL_OFFSET;
-  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  el.style.transition = 'opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out)';
   observer.observe(el);
 });
