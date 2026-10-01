@@ -1,10 +1,25 @@
 // Utilidades HTTP compartidas por los endpoints de /api (los archivos con "_" no se publican como endpoints).
 
-/** Rechaza pedidos que vienen de otro sitio (el navegador siempre manda Origin en un POST). */
+/**
+ * Solo acepta pedidos hechos desde el propio sitio: el navegador siempre manda Origin en un POST,
+ * así que si falta o es de otro host se rechaza. Sec-Fetch-Site, cuando viene, tiene que coincidir.
+ */
 function isSameOrigin(req) {
-  const origin = req.headers.origin;
-  if (!origin) return true;
-  try { return new URL(origin).host === req.headers.host; } catch { return false; }
+  const { origin, host } = req.headers;
+  const fetchSite = req.headers['sec-fetch-site'];
+  if (!origin || (fetchSite && fetchSite !== 'same-origin')) return false;
+  try { return new URL(origin).host === host; } catch { return false; }
+}
+
+/** Cuerpo JSON del pedido como objeto, o null si no es JSON, está mal formado o no es un objeto. */
+function readJsonBody(req) {
+  if (!String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) return null;
+  try {
+    const body = req.body; // Vercel lo parsea al leerlo y tira error si el JSON es inválido
+    return body && typeof body === 'object' && !Array.isArray(body) ? body : null;
+  } catch {
+    return null;
+  }
 }
 
 const sendError = (res, status, error, extra) => res.status(status).json({ error, ...extra });
@@ -22,4 +37,4 @@ function calendarEndpoint(method, tag, handle) {
   };
 }
 
-module.exports = { isSameOrigin, sendError, calendarEndpoint };
+module.exports = { isSameOrigin, readJsonBody, sendError, calendarEndpoint };

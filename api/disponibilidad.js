@@ -6,6 +6,9 @@ const { sendError, calendarEndpoint } = require('./_http');
 const CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=60';
 
 module.exports = calendarEndpoint('GET', 'disponibilidad', async (req, res) => {
+  // El sitio lo pide sin parámetros; con parámetros distintos se podría esquivar la caché y gastar la cuota de Google
+  if (req.url.includes('?')) return sendError(res, 400, 'bad_request');
+
   const cfg = readCalendarConfig();
   if (!cfg) return sendError(res, 503, 'not_configured');
 

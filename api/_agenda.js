@@ -1,6 +1,6 @@
 // Reglas de la agenda de /servicios: qué horarios se ofrecen y cómo se registra una charla.
 // Los archivos con "_" no se publican como endpoints.
-const { readCalendarConfig, fetchBusyIntervals, insertEvent } = require('./_google-calendar');
+const { readCalendarConfig, fetchBusyIntervals, insertEvent, listEvents, inviteAttendees, deleteEvent } = require('./_google-calendar');
 
 const TZ = 'America/Argentina/Buenos_Aires';
 const TZ_OFFSET = '-03:00'; // Argentina no tiene horario de verano
@@ -90,7 +90,7 @@ async function isSlotAvailable(cfg, date, time) {
   return days.some(d => d.date === date && d.slots.includes(time));
 }
 
-/** Evento de Google Calendar para una charla ya validada. */
+/** Evento de Google Calendar para una charla ya validada. El invitado se suma después, en createBooking. */
 function buildBookingEvent({ date, time, nombre, apellido, email, telefono, negocio }) {
   const start = slotStart(date, time);
   const end = start + SLOT_MS;
@@ -107,7 +107,6 @@ function buildBookingEvent({ date, time, nombre, apellido, email, telefono, nego
     ].filter(line => line !== null).join('\n'),
     start: { dateTime: new Date(start).toISOString(), timeZone: TZ },
     end: { dateTime: new Date(end).toISOString(), timeZone: TZ },
-    attendees: [{ email, displayName: fullName }],
     conferenceData: {
       createRequest: { requestId: `svc-${start}-${Math.random().toString(36).slice(2, 10)}`, conferenceSolutionKey: { type: 'hangoutsMeet' } }
     },
@@ -116,6 +115,32 @@ function buildBookingEvent({ date, time, nombre, apellido, email, telefono, nego
   };
 }
 
-const createBooking = (cfg, booking) => insertEvent(cfg, buildBookingEvent(booking));
+// La charla más antigua del horario es la que vale; a igual fecha de creación desempata el id
+const byCreation = (a, b) => a.created.localeCompare(b.created) || a.id.localeCompare(b.id);
+
+/**
+ * Reserva el horario y devuelve el evento, o null si otro pedido simultáneo lo reservó antes.
+ * Primero crea el evento sin invitados, después confirma que es el único del horario y recién ahí
+ * manda la invitación: así dos pedidos a la vez no generan dos charlas ni dos mails.
+ * Una charla cancelada o borrada no cuenta, así que su horario se puede volver a reservar.
+ */
+async function createBooking(cfg, booking) {
+  const start = slotStart(booking.date, booking.time);
+  const event = await insertEvent(cfg, buildBookingEvent(booking));
+  try {
+    const sameSlot = await listEvents(cfg, { from: start, to: start + SLOT_MS, privateProperty: `source=${BOOKING_SOURCE}` });
+    const [first] = sameSlot.sort(byCreation);
+    if (first && first.id !== event.id) {
+      await deleteEvent(cfg, event.id);
+      return null;
+    }
+    await inviteAttendees(cfg, event.id, [{ email: booking.email, displayName: `${booking.nombre} ${booking.apellido}` }]);
+    return event;
+  } catch (err) {
+    // No dejar un evento a medias ocupando el horario
+    await deleteEvent(cfg, event.id).catch(() => {});
+    throw err;
+  }
+}
 
 module.exports = { readCalendarConfig, availableDays, isSlotAvailable, createBooking, computeDays, buildBookingEvent };

@@ -1,6 +1,6 @@
 // POST /api/agendar { date, time, nombre, apellido, email, telefono, negocio?, website (anti-bots) }
 const { readCalendarConfig, isSlotAvailable, createBooking } = require('./_agenda');
-const { isSameOrigin, sendError, calendarEndpoint } = require('./_http');
+const { isSameOrigin, readJsonBody, sendError, calendarEndpoint } = require('./_http');
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_PATTERN = /^\d{2}:\d{2}$/;
@@ -14,7 +14,11 @@ const MAX_PHONE_DIGITS = 15;
 
 const clean = v => (typeof v === 'string' ? v.trim().replace(/\s+/g, ' ') : '');
 
-const isValidName = name => Boolean(name) && name.length <= MAX_NAME_LENGTH;
+// Estos campos viajan en la invitación que manda Google: no se aceptan links ni etiquetas
+const LINK_OR_TAG_PATTERN = /:\/\/|www\.|[<>]/i;
+const isPlainText = text => !LINK_OR_TAG_PATTERN.test(text);
+
+const isValidName = name => Boolean(name) && name.length <= MAX_NAME_LENGTH && isPlainText(name);
 const isValidEmail = email => email.length <= MAX_EMAIL_LENGTH && EMAIL_PATTERN.test(email);
 function isValidPhone(phone) {
   const digits = phone.replace(/\D/g, '').length;
@@ -27,7 +31,7 @@ const FIELD_RULES = [
   ['apellido', isValidName],
   ['email', isValidEmail],
   ['telefono', isValidPhone],
-  ['negocio', negocio => negocio.length <= MAX_BUSINESS_LENGTH]
+  ['negocio', negocio => negocio.length <= MAX_BUSINESS_LENGTH && isPlainText(negocio)]
 ];
 
 function parseBooking(body) {
@@ -54,7 +58,8 @@ function validate(body) {
 module.exports = calendarEndpoint('POST', 'agendar', async (req, res) => {
   if (!isSameOrigin(req)) return sendError(res, 403, 'forbidden');
 
-  const body = req.body && typeof req.body === 'object' ? req.body : {};
+  const body = readJsonBody(req);
+  if (!body) return sendError(res, 400, 'invalid_body');
   // Campo oculto: una persona no lo completa, un bot sí. Se responde "ok" para no darle pistas.
   if (clean(body.website)) return res.status(200).json({ ok: true });
 
@@ -67,6 +72,8 @@ module.exports = calendarEndpoint('POST', 'agendar', async (req, res) => {
   // Se recalcula con el calendario actual: respeta las reglas y evita reservar un horario ya ocupado.
   if (!(await isSlotAvailable(cfg, data.date, data.time))) return sendError(res, 409, 'slot_taken');
 
+  // null: otro pedido simultáneo reservó el mismo horario primero
   const event = await createBooking(cfg, data);
+  if (!event) return sendError(res, 409, 'slot_taken');
   return res.status(200).json({ ok: true, meet: event.hangoutLink || null });
 });

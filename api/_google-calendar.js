@@ -36,20 +36,20 @@ async function getAccessToken(cfg) {
   return cachedToken.value;
 }
 
-async function calendarPost(cfg, path, body) {
-  const res = await fetch(`${CALENDAR_API_URL}${path}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${await getAccessToken(cfg)}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(`calendar ${res.status}: ${data.error?.message}`);
+async function calendarRequest(cfg, method, path, body) {
+  const headers = { Authorization: `Bearer ${await getAccessToken(cfg)}` };
+  if (body) headers['Content-Type'] = 'application/json';
+  const res = await fetch(`${CALENDAR_API_URL}${path}`, { method, headers, body: body && JSON.stringify(body) });
+  const data = res.status === 204 ? null : await res.json(); // DELETE responde 204 sin cuerpo
+  if (!res.ok) throw new Error(`calendar ${res.status}: ${data?.error?.message}`);
   return data;
 }
 
+const eventsPath = cfg => `/calendars/${encodeURIComponent(cfg.calendarId)}/events`;
+
 /** Intervalos ocupados del calendario entre dos instantes, en ms: [{ start, end }] */
 async function fetchBusyIntervals(cfg, { from, to, timeZone }) {
-  const data = await calendarPost(cfg, '/freeBusy', {
+  const data = await calendarRequest(cfg, 'POST', '/freeBusy', {
     timeMin: new Date(from).toISOString(),
     timeMax: new Date(to).toISOString(),
     timeZone,
@@ -60,9 +60,30 @@ async function fetchBusyIntervals(cfg, { from, to, timeZone }) {
   return calendar.busy.map(b => ({ start: Date.parse(b.start), end: Date.parse(b.end) }));
 }
 
-/** Crea el evento con link de Meet y le manda la invitación a los invitados. */
+/** Crea el evento con link de Meet, sin avisarle a nadie todavía. */
 function insertEvent(cfg, event) {
-  return calendarPost(cfg, `/calendars/${encodeURIComponent(cfg.calendarId)}/events?conferenceDataVersion=1&sendUpdates=all`, event);
+  return calendarRequest(cfg, 'POST', `${eventsPath(cfg)}?conferenceDataVersion=1&sendUpdates=none`, event);
 }
 
-module.exports = { readCalendarConfig, fetchBusyIntervals, insertEvent };
+/** Eventos entre dos instantes que tienen la propiedad privada `privateProperty` ('clave=valor'). No trae los cancelados. */
+async function listEvents(cfg, { from, to, privateProperty }) {
+  const query = new URLSearchParams({
+    timeMin: new Date(from).toISOString(),
+    timeMax: new Date(to).toISOString(),
+    singleEvents: 'true',
+    privateExtendedProperty: privateProperty
+  });
+  const data = await calendarRequest(cfg, 'GET', `${eventsPath(cfg)}?${query}`);
+  return data.items || [];
+}
+
+/** Suma los invitados al evento y les manda la invitación. */
+function inviteAttendees(cfg, eventId, attendees) {
+  return calendarRequest(cfg, 'PATCH', `${eventsPath(cfg)}/${encodeURIComponent(eventId)}?conferenceDataVersion=1&sendUpdates=all`, { attendees });
+}
+
+function deleteEvent(cfg, eventId) {
+  return calendarRequest(cfg, 'DELETE', `${eventsPath(cfg)}/${encodeURIComponent(eventId)}?sendUpdates=none`);
+}
+
+module.exports = { readCalendarConfig, fetchBusyIntervals, insertEvent, listEvents, inviteAttendees, deleteEvent };
