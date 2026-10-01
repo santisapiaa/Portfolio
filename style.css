@@ -585,6 +585,37 @@ a:focus-visible, button:focus-visible {
   letter-spacing: 0.06em;
 }
 .contact-value { font-size: 0.88rem; word-break: break-word; }
+/* Línea secundaria: redes del proyecto freelance, más chica y tenue que las tarjetas */
+.contact-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 12px;
+  margin-top: 28px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.contact-side-icons { display: inline-flex; }
+.contact-side-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+.contact-side-icon:hover { color: var(--accent); }
+.contact-side-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 footer {
   text-align: center;

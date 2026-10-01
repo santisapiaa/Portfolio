@@ -715,6 +715,17 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 .c-action svg { width: 18px; height: 18px; }
 .c-card:hover .c-action { color: var(--accent); }
+/* Tarjeta "Redes": no es un link, los clickeables son los íconos (44 px de área táctil) */
+.c-socials { flex: none; display: flex; gap: 8px; }
+.c-social {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+.c-social svg { width: 20px; height: 20px; }
+.c-card:hover .c-social { color: var(--text-dim); }
+.c-card .c-social:hover { background: var(--accent-soft); border-color: var(--accent-dim); color: var(--accent); }
 .c-copy {
   position: relative;
   z-index: 1;
@@ -791,6 +802,11 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 .footer-contact a:hover span { border-color: var(--accent); }
 .footer-contact svg { width: 15px; height: 15px; flex: none; }
 .footer-contact .i-line { stroke-width: 2.2; }
+/* Redes: un ícono por red (cada uno con su link) y el usuario una sola vez, sin link */
+.footer-social { display: inline-flex; align-items: center; }
+.footer-social a { justify-content: center; width: 44px; height: 44px; }
+.footer-social svg { width: 18px; height: 18px; }
+.footer-social > span { margin-left: 4px; color: var(--text-dim); }
 
 /* WHATSAPP FLOTANTE */
 .wa-float {
@@ -832,6 +848,8 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 /* TABLET */
 @media (min-width: 640px) {
   .footer-contact { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px 24px; }
+  .footer-social a { width: 26px; height: 26px; }
+  .footer-social svg { width: 15px; height: 15px; }
   .svc-hero-actions { flex-direction: row; flex-wrap: wrap; }
   .problem-grid { grid-template-columns: 1fr 1fr; }
   .case-card { padding: 26px; }

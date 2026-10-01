@@ -176,6 +176,12 @@ document.addEventListener('click', e => {
     return;
   }
 
+  // Links that name their own contact method (the freelance project's socials)
+  if (a.dataset.contact) {
+    track('Contact Click', { method: a.dataset.contact });
+    return;
+  }
+
   const card = a.closest('.project-card');
   if (card) {
     const project = card.querySelector('h3').textContent.trim();

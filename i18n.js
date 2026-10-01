@@ -95,6 +95,8 @@ const I18N = {
     'contact.title': 'Looking for someone eager to learn?',
     'contact.desc': "I'm open to Junior Developer, Internship or Technical Support roles. Drop me a line — I reply quickly.",
     'contact.phone': 'Phone',
+    'contact.sideLabel': 'Freelance project · Socials:',
+    'contact.sideServices': 'See services',
     'footer': 'Designed and built by'
   },
 
@@ -185,6 +187,8 @@ const I18N = {
     'contact.title': 'Procurando alguém com vontade de aprender?',
     'contact.desc': 'Estou aberto a oportunidades como Desenvolvedor Júnior, Estagiário ou Suporte Técnico. Me escreve, respondo rápido.',
     'contact.phone': 'Telefone',
+    'contact.sideLabel': 'Projeto freelance · Redes:',
+    'contact.sideServices': 'Ver serviços',
     'footer': 'Desenhado e desenvolvido por'
   }
 };
