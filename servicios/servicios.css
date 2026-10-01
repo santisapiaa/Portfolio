@@ -502,6 +502,8 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 .case-link:hover { border-color: var(--accent); }
 
+.case-cta { margin-top: 36px; text-align: center; }
+
 .check-list { list-style: none; display: grid; gap: 8px; }
 .check-list li {
   position: relative;
@@ -563,6 +565,11 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 999px;
+}
+.plan-badge-alt {
+  background: var(--bg-alt);
+  color: var(--gold);
+  border: 1px solid rgba(245, 196, 81, 0.4);
 }
 .plan-card h3 { font-size: 1.3rem; margin-bottom: 6px; }
 .plan-desc { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 18px; }
