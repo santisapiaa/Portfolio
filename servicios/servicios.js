@@ -33,6 +33,7 @@ initHeroPause();
 initHeroRotator();
 initHeroChats();
 initCaseStack();
+initCardGlow();
 
 // Scroll-reveal
 function initScrollReveal() {
@@ -321,6 +322,30 @@ function initCaseStack() {
   sizes.observe(probe);
   // The navigation changes height when it turns into the pill: place the cards again once it settles
   navInner.addEventListener('transitionend', e => { if (e.target === navInner) layout(); });
+}
+
+// Cards: a faint light follows the cursor inside the hovered card (CSS reads --x / --y on that card only)
+function initCardGlow() {
+  const HOVER_QUERY = '(hover: hover) and (pointer: fine)';
+  if (reduceMotion || !window.matchMedia(HOVER_QUERY).matches) return;
+  let card = null;
+  let x = 0, y = 0;
+  let frame = 0;
+
+  const paint = () => {
+    frame = 0;
+    if (!card) return;
+    const box = card.getBoundingClientRect();
+    card.style.setProperty('--x', `${Math.round(x - box.left)}px`);
+    card.style.setProperty('--y', `${Math.round(y - box.top)}px`);
+  };
+  document.addEventListener('pointermove', e => {
+    card = e.target.closest ? e.target.closest('.glow-card') : null;
+    if (!card) return;
+    x = e.clientX;
+    y = e.clientY;
+    if (!frame) frame = requestAnimationFrame(paint);
+  }, { passive: true });
 }
 
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section
