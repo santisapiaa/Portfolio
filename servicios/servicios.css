@@ -853,8 +853,9 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 
 /* CIERRE */
 /* CONTACTO: tarjetas por canal + recuadro para escribir por WhatsApp */
-.contact-wrap { display: grid; gap: 20px; }
-.contact-list { display: grid; gap: 12px; }
+/* minmax(0, 1fr): las tarjetas se achican con la pantalla en vez de empujar el ancho de la página */
+.contact-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.contact-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .i-line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .c-card {
   position: relative;
@@ -1101,7 +1102,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .chat:nth-child(5) .chat-pop { animation-delay: 480ms; }
   .svc .section { padding: 128px 24px; }
   .service-grid { grid-template-columns: repeat(3, 1fr); }
-  .contact-wrap { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+  .contact-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
   .wa-box { padding: 28px; }
   .case-stack { --stack-top: 118px; --tab-step: 124px; }
   .case-card { margin-bottom: 36px; }
