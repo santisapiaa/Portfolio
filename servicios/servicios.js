@@ -258,6 +258,9 @@ function initCaseStack() {
   stack.append(probe);
   stack.classList.add('is-stacked');
 
+  const navbar = document.getElementById('navbar');
+  const navInner = navbar.querySelector('.nav-inner');
+  let navBottom = 0;
   let onScreen = false;
   let ticking = false;
 
@@ -265,7 +268,9 @@ function initCaseStack() {
   // so its bottom edge stays in view. Runs when a card changes size (width change, fonts), not on scroll.
   function layout() {
     const screenHeight = probe.offsetHeight;
-    const base = parseFloat(getComputedStyle(stack).getPropertyValue('--stack-top')) || 0;
+    // Under the navigation once it has shrunk into its pill (by the time a card sticks, it always has)
+    if (navbar.classList.contains('is-scrolled') || !navBottom) navBottom = navInner.getBoundingClientRect().bottom;
+    const base = navBottom + (parseFloat(getComputedStyle(stack).getPropertyValue('--stack-gap')) || 0);
     items.forEach((item, index) => {
       item.height = item.card.offsetHeight;
       item.stick = Math.min(base + index * STEP, screenHeight - item.height - BOTTOM_MARGIN);
@@ -314,6 +319,8 @@ function initCaseStack() {
   const sizes = new ResizeObserver(layout);
   items.forEach(item => sizes.observe(item.card));
   sizes.observe(probe);
+  // The navigation changes height when it turns into the pill: place the cards again once it settles
+  navInner.addEventListener('transitionend', e => { if (e.target === navInner) layout(); });
 }
 
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section

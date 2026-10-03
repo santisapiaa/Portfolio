@@ -526,7 +526,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 
 /* CASOS: una tarjeta por caso, con pestaña de carpeta. Si entran en pantalla, se apilan al bajar
    (lo activa servicios.js con .is-stacked); si no, o con movimiento reducido, quedan como lista. */
-.case-stack { counter-reset: caso; --stack-top: 104px; --tab-step: 92px; }
+.case-stack { counter-reset: caso; --stack-gap: 10px; --tab-step: 92px; }
 .case-card {
   --i: 0;
   counter-increment: caso;
@@ -639,11 +639,9 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 
 /* Apilado: cada tarjeta queda fija arriba y la siguiente sube y la tapa. La tapada se achica y se apaga:
    servicios.js escribe al hacer scroll la escala de la tarjeta y la opacidad de su velo (solo transform y opacity).
-   Si una tarjeta es más alta que la pantalla, servicios.js le sube el tope para que se fije con el borde de abajo a la vista. */
-.case-stack.is-stacked .case-card:not(:last-of-type) {
-  position: sticky;
-  top: calc(var(--stack-top) + var(--i) * 10px);
-}
+   El tope lo pone servicios.js: el borde de abajo de la navegación más --stack-gap, y un escalón por tarjeta.
+   Si una tarjeta es más alta que la pantalla, lo sube para que se fije con el borde de abajo a la vista. */
+.case-stack.is-stacked .case-card:not(:last-of-type) { position: sticky; }
 /* Mide el alto de pantalla con las barras del navegador a la vista (el más chico), que no cambia al hacer scroll */
 .case-probe {
   position: fixed;
@@ -1111,7 +1109,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .service-grid { grid-template-columns: repeat(3, 1fr); }
   .contact-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
   .wa-box { padding: 28px; }
-  .case-stack { --stack-top: 118px; --tab-step: 124px; }
+  .case-stack { --tab-step: 124px; }
   .case-card { margin-bottom: 36px; }
   .case-body { grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; padding: 28px; }
   .case-card:nth-child(even) .case-shots { order: 2; }
@@ -1319,4 +1317,30 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .chat.is-dragging { cursor: grabbing; z-index: 1; }
   .chat.is-dragging .chat-pop { transform: scale(1.05); }
   .chat.is-dragging .chat-bubble { animation-play-state: paused; }
+}
+
+/* CASOS EN CELULAR: versión compacta, para que cada tarjeta entre entera entre la navegación y el borde
+   de abajo de la pantalla y, al quedar fija, se le vean la pestaña y el borde de arriba. */
+@media (max-width: 767px) {
+  .case-stack { --stack-gap: 8px; --tab-step: 84px; }
+  .case-card { padding-top: 26px; margin-bottom: 20px; }
+  .case-tab { padding: 5px 11px 4px; font-size: 0.66rem; }
+  .case-body { gap: 12px; padding: 14px; }
+  .case-shots { padding: 0 8% 4% 0; }
+  .shot-bar { gap: 4px; padding: 6px 8px; }
+  .shot-bar i { width: 6px; height: 6px; }
+  .shot-desktop img { aspect-ratio: 2 / 1; }
+  .shot-phone { width: 21%; border-width: 2px; border-radius: 11px; }
+  .case-real { padding: 2px 9px; font-size: 0.66rem; }
+  .case-tag { font-size: 0.68rem; }
+  .case-info h3 { font-size: 1.2rem; margin: 6px 0; }
+  .case-info > p { margin-bottom: 10px; font-size: 0.92rem; line-height: 1.5; }
+  .case-chips { gap: 6px; }
+  .case-chips li { padding: 4px 10px; font-size: 0.7rem; }
+  .case-info > p.case-note { margin-top: 10px; padding: 8px 12px; font-size: 0.82rem; }
+  .case-link { margin-top: 10px; font-size: 0.95rem; }
+}
+/* Desde tablet la tarjeta queda más separada de la navegación, como siempre */
+@media (min-width: 768px) {
+  .case-stack { --stack-gap: 43px; }
 }
