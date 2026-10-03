@@ -203,15 +203,25 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   100% { transform: translate(-50px, 30px) scale(0.94); }
 }
 
-/* Entrada al cargar: el texto aparece escalonado y la agenda sube */
+/* Entrada al cargar: todo el hero queda a la vista en menos de un segundo.
+   El título entra palabra por palabra; el resto del texto, escalonado; la agenda sube. */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } }
 @keyframes riseIn { from { opacity: 0; transform: translateY(70px) rotate(-3deg) scale(0.96); } }
-.svc-hero-text > * { animation: fadeUp 0.7s var(--ease-out) both; }
-.svc-hero-text > :nth-child(2) { animation-delay: 0.1s; }
-.svc-hero-text > :nth-child(3) { animation-delay: 0.2s; }
-.svc-hero-text > :nth-child(4) { animation-delay: 0.3s; }
-.svc-hero-text > :nth-child(5) { animation-delay: 0.4s; }
-.svc-demo-wrap > * { animation: riseIn 0.9s var(--ease-out) 0.3s both; }
+@keyframes wordUp { from { opacity: 0; transform: translateY(12px); } }
+.svc-hero-text > * { animation: fadeUp 500ms var(--ease-out) both; }
+.svc-hero-text > h1 { animation: none; }
+.svc-hero-text > :nth-child(3) { animation-delay: 200ms; }
+.svc-hero-text > :nth-child(4) { animation-delay: 280ms; }
+.svc-hero-text > :nth-child(5) { animation-delay: 360ms; }
+.h1-word { display: inline-block; animation: wordUp 450ms var(--ease-out) both; }
+.h1-word:nth-child(1) { animation-delay: 60ms; }
+.h1-word:nth-child(2) { animation-delay: 100ms; }
+.h1-word:nth-child(3) { animation-delay: 140ms; }
+.h1-word:nth-child(4) { animation-delay: 180ms; }
+.h1-word:nth-child(5) { animation-delay: 220ms; }
+.h1-word:nth-child(6) { animation-delay: 260ms; }
+.svc-hero h1 .rotator { animation: wordUp 450ms var(--ease-out) 320ms both; }
+.svc-demo-wrap > * { animation: riseIn 750ms var(--ease-out) 150ms both; }
 .svc-intro {
   display: flex;
   align-items: center;
@@ -269,6 +279,61 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 .rotator span.is-active { opacity: 1; transform: none; }
 .rotator span.is-leaving { opacity: 0; transform: translateY(-0.45em); }
+
+/* MENSAJES DEL HERO: burbujas de chat con las preguntas que una web responde sola.
+   Tres capas por burbuja: .chat (posición y arrastre), .chat-pop (entrada) y .chat-bubble (inclinación y flotación). */
+.hero-chats {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.chat { position: absolute; display: none; }
+.chat-pop { animation: chatPop 500ms var(--ease-out) 200ms both; }
+.chat-bubble {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 16px 5px;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  transform: rotate(var(--rot, 0deg));
+}
+.chat-time {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--text-faint);
+}
+/* Celular: dos burbujas quietas, donde no tapan nada. Una arriba, entre el menú y la presentación,
+   y otra pegada sobre la esquina de la agenda. */
+.chat:nth-child(2) { display: block; top: 70px; right: 22px; --rot: 3deg; }
+.chat .chat-bubble,
+.chat-pinned {
+  padding: 7px 10px 7px 12px;
+  font-size: 0.82rem;
+}
+.svc-demo-wrap { position: relative; }
+.chat-pinned {
+  --rot: -3deg;
+  position: absolute;
+  top: -27px;
+  right: 10px;
+  z-index: 1;
+}
+@keyframes chatPop { from { opacity: 0; transform: scale(0.7); } }
+@keyframes chatPinnedPop { from { opacity: 0; transform: rotate(var(--rot)) scale(0.7); } }
+.svc-demo-wrap > .chat-pinned { animation: chatPinnedPop 500ms var(--ease-out) 400ms both; }
+@keyframes chatFloat {
+  0%, 100% { transform: rotate(var(--rot)); }
+  35% { transform: translate(var(--fx), var(--fy)) rotate(calc(var(--rot) + var(--sway))); }
+  70% { transform: translate(calc(var(--fx) * -0.6), calc(var(--fy) * 0.5)) rotate(calc(var(--rot) - var(--sway) * 0.6)); }
+}
 
 /* Agenda en vivo del hero */
 .svc-demo-wrap { width: 100%; max-width: 380px; justify-self: center; }
@@ -893,6 +958,43 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   /* Al bajar: el texto se desvanece y la agenda sube más rápido (valor --hp que pone servicios.js) */
   .svc-hero-text { transform: translateY(calc(var(--hp, 0) * -60px)); opacity: calc(1 - var(--hp, 0) * 1.1); }
   .svc-demo-wrap { transform: translateY(calc(var(--hp, 0) * -170px)) rotate(calc(var(--hp, 0) * -2deg)); }
+
+  /* Mensajes flotando alrededor del texto y la agenda. La capa va por debajo de los dos:
+     aunque se arrastre una burbuja encima, nunca tapa el título ni los botones. */
+  .svc-hero-text, .svc-demo-wrap { z-index: 1; }
+  .svc-hero-text { position: relative; }
+  .chat-pinned { display: none; }
+  .hero-chats {
+    transform: translateY(calc(var(--hp, 0) * -120px));
+    opacity: calc(1 - var(--hp, 0) * 1.6);
+  }
+  .chat {
+    display: block;
+    pointer-events: auto;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .chat .chat-bubble {
+    padding: 9px 12px 9px 14px;
+    font-size: 0.92rem;
+    animation: chatFloat var(--dur) ease-in-out var(--delay) infinite;
+  }
+  .chat-pop { transition: transform 160ms var(--ease-out); }
+  /* Entre 900 y 1200 px no hay margen para las cinco: quedan tres */
+  .chat:nth-child(2), .chat:nth-child(5) { display: none; }
+
+  /* Cada una con su lugar, su inclinación y su ritmo, para que nunca se muevan a la par.
+     Los topes (max/min) las mantienen debajo de la navegación y dentro del hero en pantallas bajas. */
+  .chat:nth-child(1) { right: 64px; top: max(92px, calc(50% - 306px)); --rot: -4deg; --sway: 3deg; --fx: 5px; --fy: -8px; --dur: 7.2s; --delay: -1.5s; }
+  .chat:nth-child(2) { left: 372px; right: auto; top: max(104px, calc(50% - 290px)); --rot: 3deg; --sway: -4deg; --fx: -6px; --fy: -6px; --dur: 6s; --delay: -3.2s; }
+  .chat:nth-child(3) { right: 124px; top: min(calc(100% - 70px), calc(50% + 268px)); --rot: 5deg; --sway: 3deg; --fx: -5px; --fy: 7px; --dur: 8.1s; --delay: -5s; }
+  .chat:nth-child(4) { right: 318px; top: min(calc(100% - 56px), calc(50% + 300px)); --rot: -3deg; --sway: 5deg; --fx: 7px; --fy: -5px; --dur: 6.7s; --delay: -2.4s; }
+  .chat:nth-child(5) { left: 44px; top: min(calc(100% - 62px), calc(50% + 282px)); --rot: 4deg; --sway: -3deg; --fx: 6px; --fy: 6px; --dur: 9s; --delay: -6.3s; }
+  .chat:nth-child(1) .chat-pop { animation-delay: 200ms; }
+  .chat:nth-child(2) .chat-pop { animation-delay: 270ms; }
+  .chat:nth-child(3) .chat-pop { animation-delay: 340ms; }
+  .chat:nth-child(4) .chat-pop { animation-delay: 410ms; }
+  .chat:nth-child(5) .chat-pop { animation-delay: 480ms; }
   .svc .section { padding: 128px 24px; }
   .service-grid { grid-template-columns: repeat(3, 1fr); }
   .contact-wrap { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
@@ -1091,4 +1193,16 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .c-card:hover { transform: translateY(-3px); }
   .wa-float:hover { transform: scale(1.06); }
   .wa-float:active { transform: scale(0.95); }
+}
+
+/* MENSAJES DEL HERO: las cinco desde 1200 px, y arrastre solo con mouse */
+@media (min-width: 1200px) {
+  .chat:nth-child(2), .chat:nth-child(5) { display: block; }
+  .chat:nth-child(3) { right: 28px; }
+}
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .chat { cursor: grab; touch-action: none; }
+  .chat.is-dragging { cursor: grabbing; z-index: 1; }
+  .chat.is-dragging .chat-pop { transform: scale(1.05); }
+  .chat.is-dragging .chat-bubble { animation-play-state: paused; }
 }

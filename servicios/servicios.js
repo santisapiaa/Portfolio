@@ -30,6 +30,7 @@ initNavbar();
 initMobileMenu();
 initHeroScrollProgress();
 initHeroRotator();
+initHeroChats();
 
 // Scroll-reveal
 function initScrollReveal() {
@@ -142,6 +143,50 @@ function initHeroRotator() {
     words[current].classList.add('is-active');
     setTimeout(() => prev.classList.remove('is-leaving'), LEAVE_ANIMATION_MS);
   }, ROTATE_EVERY_MS);
+}
+
+// Hero: the chat bubbles can be dragged with a mouse; once dropped they stay there and float again
+function initHeroChats() {
+  const DRAG_QUERY = '(min-width: 900px) and (hover: hover) and (pointer: fine)';
+  const layer = document.getElementById('heroChats');
+  if (!layer || reduceMotion || !window.matchMedia(DRAG_QUERY).matches) return;
+
+  layer.querySelectorAll('.chat').forEach(chat => {
+    let x = 0, y = 0;
+    let drag = null;
+
+    chat.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      // Measured once per drag: how far the bubble can travel before leaving the hero
+      const box = chat.getBoundingClientRect();
+      const bounds = layer.getBoundingClientRect();
+      drag = {
+        startX: e.clientX - x,
+        startY: e.clientY - y,
+        minX: x + bounds.left - box.left,
+        maxX: x + bounds.right - box.right,
+        minY: y + bounds.top - box.top,
+        maxY: y + bounds.bottom - box.bottom
+      };
+      chat.setPointerCapture(e.pointerId);
+      chat.classList.add('is-dragging');
+      e.preventDefault();
+    });
+
+    chat.addEventListener('pointermove', e => {
+      if (!drag) return;
+      x = Math.min(drag.maxX, Math.max(drag.minX, e.clientX - drag.startX));
+      y = Math.min(drag.maxY, Math.max(drag.minY, e.clientY - drag.startY));
+      chat.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    const release = () => {
+      drag = null;
+      chat.classList.remove('is-dragging');
+    };
+    chat.addEventListener('pointerup', release);
+    chat.addEventListener('pointercancel', release);
+  });
 }
 
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section

@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=6">
-<link rel="stylesheet" href="/servicios/servicios.css?v=16">
+<link rel="stylesheet" href="/servicios/servicios.css?v=17">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -115,12 +115,20 @@
 
 <header id="inicio" class="svc-hero">
   <div class="hero-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <!-- Mensajes que flotan: las preguntas que una web responde sola. Decorativos; para sumar uno, copiar un bloque .chat -->
+  <div class="hero-chats" id="heroChats" aria-hidden="true">
+    <div class="chat"><div class="chat-pop"><p class="chat-bubble">¿Tenés turno el sábado?<span class="chat-time">23:14</span></p></div></div>
+    <div class="chat"><div class="chat-pop"><p class="chat-bubble">¿Cuánto sale?<span class="chat-time">08:02</span></p></div></div>
+    <div class="chat"><div class="chat-pop"><p class="chat-bubble">Hola, ¿precio?<span class="chat-time">13:40</span></p></div></div>
+    <div class="chat"><div class="chat-pop"><p class="chat-bubble">¿Hasta qué hora abren?<span class="chat-time">21:55</span></p></div></div>
+    <div class="chat"><div class="chat-pop"><p class="chat-bubble">¿Dónde quedan?<span class="chat-time">07:31</span></p></div></div>
+  </div>
   <div class="svc-hero-text">
     <p class="svc-intro">
       <img src="/servicios/santiago-v2.webp" alt="" width="44" height="44">
       <span>Santiago, desarrollador web · Buenos Aires</span>
     </p>
-    <h1>Páginas web para comercios que quieren
+    <h1><span class="h1-word">Páginas</span> <span class="h1-word">web</span> <span class="h1-word">para</span> <span class="h1-word">comercios</span> <span class="h1-word">que</span> <span class="h1-word">quieren</span>
       <span class="rotator" id="heroRotator" aria-hidden="true"><span class="highlight is-active">más turnos</span><span class="highlight">más clientes</span><span class="highlight">menos mensajes</span><span class="highlight">aparecer en Google</span></span>
       <span class="sr-only">recibir más turnos y clientes</span>
     </h1>
@@ -137,6 +145,7 @@
 
   <!-- Agenda real: próximos horarios libres de Google Calendar -->
   <div class="svc-demo-wrap">
+    <p class="chat-bubble chat-pinned" aria-hidden="true">¿Tenés turno el sábado?<span class="chat-time">23:14</span></p>
     <div class="svc-demo" id="heroAgenda">
       <div class="demo-head">
         <span class="demo-status"><span class="demo-dot"></span>Agenda abierta</span>
@@ -514,6 +523,6 @@
   </symbol>
 </svg>
 
-<script src="/servicios/servicios.js?v=7"></script>
+<script src="/servicios/servicios.js?v=8"></script>
 </body>
 </html>
