@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=6">
-<link rel="stylesheet" href="/servicios/servicios.css?v=18">
+<link rel="stylesheet" href="/servicios/servicios.css?v=19">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -222,71 +222,83 @@
   <h2 class="svc-title">Proyectos que ya hice</h2>
   <p class="svc-lead">Entrá y probalos: están online.</p>
 
-  <article class="case-card reveal">
-    <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="case-media" tabindex="-1" aria-hidden="true">
-      <img src="/assets/projects/benedetto.webp" alt="" width="1200" height="750" loading="lazy" decoding="async">
-    </a>
-    <div class="case-info">
-      <span class="case-tag">Peluquería y barbería</span>
-      <h3>Benedetto Peluquería</h3>
-      <p>Los clientes entran desde el celular, ven qué horarios tiene libres cada peluquero y piden el turno por WhatsApp con un toque. Menos idas y vueltas por mensaje para el equipo.</p>
-      <ul class="check-list">
-        <li>Horarios libres de cada peluquero, en tiempo real</li>
-        <li>Pedido de turno directo por WhatsApp</li>
-        <li>Cartel de abierto o cerrado según el horario</li>
-        <li>Se cierra solo en los feriados</li>
-      </ul>
-      <!-- Testimonio: descomentar cuando lo tengas
-      <blockquote class="testimonial">
-        <p>"TEXTO DEL TESTIMONIO"</p>
-        <cite>NOMBRE, dueño de Benedetto Peluquería</cite>
-      </blockquote>
-      -->
-      <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="case-link">Ver sitio en vivo →</a>
-    </div>
-  </article>
-
-  <article class="case-card reveal">
-    <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener" class="case-media" tabindex="-1" aria-hidden="true">
-      <img src="/assets/projects/dentar-v2.webp" alt="" width="1200" height="750" loading="lazy" decoding="async">
-    </a>
-    <div class="case-info">
-      <span class="case-tag">Consultorio odontológico</span>
-      <h3>Dentar Devoto</h3>
-      <p>Un sitio para que los pacientes conozcan el consultorio y un panel interno para que el equipo tenga toda la información de cada paciente en un solo lugar.</p>
-      <ul class="check-list">
-        <li>Ficha de cada paciente</li>
-        <li>Odontograma digital</li>
-        <li>Cuenta corriente de cada paciente</li>
-        <li>Turnos sincronizados con Google Calendar</li>
-      </ul>
-      <!-- Testimonio: descomentar cuando lo tengas
-      <blockquote class="testimonial">
-        <p>"TEXTO DEL TESTIMONIO"</p>
-        <cite>NOMBRE, Dentar Devoto</cite>
-      </blockquote>
-      -->
-      <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener" class="case-link">Ver sitio en vivo →</a>
-    </div>
-  </article>
-  <article class="case-card reveal">
-    <a href="https://hayequipo-ten.vercel.app/" target="_blank" rel="noopener" class="case-media" tabindex="-1" aria-hidden="true">
-      <img src="/assets/projects/hayequipo.webp" alt="" width="1200" height="750" loading="lazy" decoding="async">
-    </a>
-    <div class="case-info">
-      <span class="case-tag">App web para clubes · Proyecto en equipo</span>
-      <h3>HayEquipo</h3>
-      <p>Una app web para que los clubes organicen su plantel en un solo lugar: arman el partido, cada jugador confirma si va y los avisos quedan publicados para todos. Sin perseguir a nadie por WhatsApp.</p>
-      <ul class="check-list">
-        <li>Partidos con fecha, sede y convocatoria</li>
-        <li>Quién confirmó, quién falta responder y quién no va, de un vistazo</li>
-        <li>Avisos para todo el plantel</li>
-        <li>Pizarra táctica para armar el equipo</li>
-      </ul>
-      <p class="case-note"><strong>Mi parte:</strong> diseño de la interfaz y frontend, junto al resto del equipo. Es una app lista para usar, todavía sin implementar en un club.</p>
-      <a href="https://hayequipo-ten.vercel.app/" target="_blank" rel="noopener" class="case-link">Probar la app →</a>
-    </div>
-  </article>
+  <!-- Casos apilados: una tarjeta por caso. Para sumar otro, copiar un bloque <article class="case-card"> entero;
+       el número de la pestaña y el escalonado salen solos. -->
+  <div class="case-stack" id="caseStack">
+    <article class="case-card reveal">
+      <div class="case-body">
+        <span class="case-tab">Caso</span>
+        <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="case-shots" tabindex="-1" aria-hidden="true">
+          <span class="shot-desktop"><span class="shot-bar"><i></i><i></i><i></i></span><img src="/assets/projects/benedetto.webp" alt="" width="1200" height="750" loading="lazy" decoding="async"></span>
+          <span class="shot-phone"><img src="/assets/projects/benedetto-movil.webp" alt="" width="480" height="1039" loading="lazy" decoding="async"></span>
+        </a>
+        <div class="case-info">
+          <p class="case-meta"><span class="case-real">Caso real</span><span class="case-tag">Peluquería y barbería</span></p>
+          <h3>Benedetto Peluquería</h3>
+          <p>Los clientes entran desde el celular, ven qué horarios tiene libres cada peluquero y piden el turno por WhatsApp con un toque. Menos idas y vueltas por mensaje para el equipo.</p>
+          <ul class="case-chips">
+          <li>Turnos en tiempo real</li>
+          <li>Google Calendar</li>
+          <li>WhatsApp</li>
+          </ul>
+          <!-- Testimonio: descomentar cuando lo tengas
+          <blockquote class="testimonial">
+            <p>"TEXTO DEL TESTIMONIO"</p>
+            <cite>NOMBRE, dueño de Benedetto Peluquería</cite>
+          </blockquote>
+          -->
+          <a href="https://benedetto-peluqueria-mu.vercel.app/" target="_blank" rel="noopener" class="case-link">Ver sitio en vivo →</a>
+        </div>
+      </div>
+    </article>
+    <article class="case-card reveal">
+      <div class="case-body">
+        <span class="case-tab">Caso</span>
+        <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener" class="case-shots" tabindex="-1" aria-hidden="true">
+          <span class="shot-desktop"><span class="shot-bar"><i></i><i></i><i></i></span><img src="/assets/projects/dentar-escritorio.webp" alt="" width="1600" height="1000" loading="lazy" decoding="async"></span>
+          <span class="shot-phone"><img src="/assets/projects/dentar-movil.webp" alt="" width="480" height="1039" loading="lazy" decoding="async"></span>
+        </a>
+        <div class="case-info">
+          <p class="case-meta"><span class="case-real">Caso real</span><span class="case-tag">Consultorio odontológico</span></p>
+          <h3>Dentar Devoto</h3>
+          <p>Un sitio para que los pacientes conozcan el consultorio y un panel interno para que el equipo tenga toda la información de cada paciente en un solo lugar.</p>
+          <ul class="case-chips">
+          <li>Panel de gestión</li>
+          <li>Odontograma digital</li>
+          <li>Agenda por profesional</li>
+          </ul>
+          <!-- Testimonio: descomentar cuando lo tengas
+          <blockquote class="testimonial">
+            <p>"TEXTO DEL TESTIMONIO"</p>
+            <cite>NOMBRE, Dentar Devoto</cite>
+          </blockquote>
+          -->
+          <a href="https://dentar-devoto-front.vercel.app/" target="_blank" rel="noopener" class="case-link">Ver sitio en vivo →</a>
+        </div>
+      </div>
+    </article>
+    <article class="case-card reveal">
+      <div class="case-body">
+        <span class="case-tab">Caso</span>
+        <a href="https://hayequipo-ten.vercel.app/" target="_blank" rel="noopener" class="case-shots" tabindex="-1" aria-hidden="true">
+          <span class="shot-desktop shot-plain"><img src="/assets/projects/hayequipo.webp" alt="" width="1200" height="750" loading="lazy" decoding="async"></span>
+          <span class="shot-phone"><img src="/assets/projects/hayequipo-movil-2.webp" alt="" width="480" height="976" loading="lazy" decoding="async"></span>
+        </a>
+        <div class="case-info">
+          <p class="case-meta"><span class="case-real">Proyecto en equipo</span><span class="case-tag">App web para clubes</span></p>
+          <h3>HayEquipo</h3>
+          <p>Una app web para que los clubes organicen su plantel en un solo lugar: arman el partido, cada jugador confirma si va y los avisos quedan publicados para todos. Sin perseguir a nadie por WhatsApp.</p>
+          <ul class="case-chips">
+          <li>Convocatorias</li>
+          <li>Confirmación de asistencia</li>
+          <li>Pizarra táctica</li>
+          </ul>
+        <p class="case-note"><strong>Mi parte:</strong> diseño de la interfaz y frontend, junto al resto del equipo. Es una app lista para usar, todavía sin implementar en un club.</p>
+          <a href="https://hayequipo-ten.vercel.app/" target="_blank" rel="noopener" class="case-link">Probar la app →</a>
+        </div>
+      </div>
+    </article>
+  </div>
 
   <div class="case-cta">
     <a href="https://wa.me/5491166429749?text=Hola%20Santiago%2C%20vi%20tus%20casos%20y%20quiero%20algo%20as%C3%AD%20para%20mi%20negocio" target="_blank" rel="noopener" class="btn-wa btn-wa-lg" data-wa="casos">
@@ -522,6 +534,6 @@
   </symbol>
 </svg>
 
-<script src="/servicios/servicios.js?v=9"></script>
+<script src="/servicios/servicios.js?v=10"></script>
 </body>
 </html>

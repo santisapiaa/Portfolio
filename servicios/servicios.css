@@ -515,31 +515,140 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 .problem-card h3 { font-size: 1.12rem; line-height: 1.3; margin-bottom: 8px; }
 .problem-card p { color: var(--text-dim); font-size: 0.96rem; }
 
-/* CASOS */
+/* CASOS: una tarjeta por caso, con pestaña de carpeta. Si entran en pantalla, se apilan al bajar
+   (lo activa servicios.js con .is-stacked); si no, o con movimiento reducido, quedan como lista. */
+.case-stack { counter-reset: caso; --stack-top: 104px; --tab-step: 92px; }
 .case-card {
+  --i: 0;
+  counter-increment: caso;
+  position: relative;
+  padding-top: 31px; /* lugar de la pestaña */
+  margin-bottom: 24px;
+}
+.case-card:nth-child(2) { --i: 1; }
+.case-card:nth-child(3) { --i: 2; }
+.case-card:nth-child(4) { --i: 3; }
+.case-card:nth-child(5) { --i: 4; }
+.case-card:nth-child(6) { --i: 5; }
+.case-body {
+  position: relative;
   display: grid;
-  gap: 22px;
+  gap: 20px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px;
-  margin-bottom: 20px;
 }
-.case-media {
+/* Pestaña de carpeta: cada una corrida a la derecha de la anterior, para que al apilarse se vean todas */
+.case-tab {
+  position: absolute;
+  bottom: 100%;
+  left: calc(14px + var(--i) * var(--tab-step));
+  padding: 7px 14px 5px;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(var(--accent-soft), var(--accent-soft)), var(--surface);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.case-tab::after { content: ' ' counter(caso, decimal-leading-zero); }
+.case-card:nth-child(3n + 2) .case-tab {
+  background: linear-gradient(rgba(245, 196, 81, 0.1), rgba(245, 196, 81, 0.1)), var(--surface);
+  color: var(--gold);
+}
+.case-card:nth-child(3n) .case-tab { background: var(--surface-hover); color: var(--text); }
+
+/* Capturas: escritorio en un marco de navegador y celular superpuesto en la esquina */
+.case-shots { position: relative; display: block; padding: 0 9% 6% 0; }
+.shot-desktop {
   display: block;
+  border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid var(--border);
-  aspect-ratio: 16 / 10;
   background: var(--bg-alt);
 }
-.case-media img {
+.shot-bar { display: flex; gap: 5px; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.shot-bar i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+.shot-desktop img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top;
-  display: block;
   transition: transform 0.5s ease;
+}
+.shot-phone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24%;
+  border: 3px solid var(--surface-hover);
+  outline: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.7);
+}
+.shot-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 18;
+  object-fit: cover;
+  object-position: top;
+}
+
+.case-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.case-real {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 999px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.case-real::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.case-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.case-chips li {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-alt);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+/* Apilado: cada tarjeta queda fija arriba y la siguiente sube y la tapa. La tapada se achica y se apaga:
+   servicios.js escribe al hacer scroll la escala de la tarjeta y la opacidad de su velo (solo transform y opacity). */
+.case-stack.is-stacked .case-card:not(:last-child) {
+  position: sticky;
+  top: calc(var(--stack-top) + var(--i) * 10px);
+}
+.case-stack.is-stacked .case-card { contain: layout; }
+.case-stack.is-stacked .case-body {
+  transform-origin: center top;
+  will-change: transform;
+}
+.case-dim { display: none; }
+.case-stack.is-stacked .case-dim {
+  display: block;
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: var(--bg);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
 }
 .case-tag {
   font-family: var(--font-mono);
@@ -548,7 +657,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.case-info h3 { font-size: 1.45rem; margin: 6px 0 10px; }
+.case-info h3 { font-size: 1.45rem; margin: 8px 0 10px; }
 .case-info > p { color: var(--text-dim); margin-bottom: 16px; }
 .case-info > p.case-note {
   margin: 16px 0 0;
@@ -561,7 +670,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 .case-note strong { color: var(--text); }
 .case-link {
   display: inline-block;
-  margin-top: 18px;
+  margin-top: 16px;
   font-weight: 600;
   color: var(--accent);
   border-bottom: 1px solid transparent;
@@ -935,7 +1044,8 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .footer-social svg { width: 15px; height: 15px; }
   .svc-hero-actions { flex-direction: row; flex-wrap: wrap; }
   .problem-grid { grid-template-columns: 1fr 1fr; }
-  .case-card { padding: 26px; }
+  .case-body { padding: 24px; }
+  .case-stack { --tab-step: 112px; }
 }
 
 /* DESKTOP */
@@ -993,8 +1103,10 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .service-grid { grid-template-columns: repeat(3, 1fr); }
   .contact-wrap { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
   .wa-box { padding: 28px; }
-  .case-card { grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; padding: 28px; }
-  .case-card:nth-of-type(even) .case-media { order: 2; }
+  .case-stack { --stack-top: 118px; --tab-step: 124px; }
+  .case-card { margin-bottom: 36px; }
+  .case-body { grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; padding: 28px; }
+  .case-card:nth-child(even) .case-shots { order: 2; }
   .plan-grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
   .steps { grid-template-columns: repeat(3, 1fr); }
 }
@@ -1183,7 +1295,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .btn-wa:hover { transform: translateY(-2px); }
   .nav-wa:active,
   .btn-wa:active { transform: translateY(0) scale(0.97); }
-  .case-card:hover .case-media img { transform: scale(1.03); }
+  .case-card:hover .shot-desktop img { transform: scale(1.03); }
   .c-card:hover { transform: translateY(-3px); }
   .wa-float:hover { transform: scale(1.06); }
   .wa-float:active { transform: scale(0.95); }
