@@ -232,70 +232,67 @@ function initHeroChats() {
 }
 
 // Cases: each card sticks to the top and the next one slides over it; the covered card shrinks and dims.
-// Positions are measured once (and again when the page resizes); scrolling only reads scrollY and writes a scale and an opacity.
+// A card's state depends only on where the cards are on screen right now: never on scroll direction,
+// on stored scroll positions or on the browser's toolbar showing or hiding.
 function initCaseStack() {
   const SHRINK = 0.06;
   const DIM = 0.6;
+  const STEP = 10;
   const BOTTOM_MARGIN = 16;
   const stack = document.getElementById('caseStack');
   if (!stack || reduceMotion || !('ResizeObserver' in window)) return;
 
-  const items = [...stack.querySelectorAll('.case-card')].map(card => {
+  const items = [...stack.querySelectorAll('.case-card')].map((card, index, all) => {
     const body = card.querySelector('.case-body');
     const dim = document.createElement('span');
     dim.className = 'case-dim';
     dim.setAttribute('aria-hidden', 'true');
     body.append(dim);
-    return { card, body, dim, top: 0, height: 0, stick: 0, progress: 0 };
+    return { card, body, dim, sticky: index < all.length - 1, height: 0, stick: 0, progress: 0 };
   });
   if (items.length < 2) return;
-  let stacked = false;
+
+  // Height of the screen with the browser's toolbars showing: it stays the same while scrolling
+  const probe = document.createElement('div');
+  probe.className = 'case-probe';
+  stack.append(probe);
+  stack.classList.add('is-stacked');
+
   let onScreen = false;
   let ticking = false;
 
-  function paint(item, progress) {
-    if (progress === item.progress) return;
-    item.progress = progress;
-    item.body.style.transform = progress ? `scale(${1 - progress * SHRINK})` : '';
-    item.dim.style.opacity = progress * DIM;
-  }
-
-  function measure() {
-    // Natural positions, read with the stack switched off
-    stack.classList.remove('is-stacked');
-    const scrollY = window.scrollY;
-    items.forEach(item => {
-      const box = item.card.getBoundingClientRect();
-      item.top = box.top + scrollY;
-      item.height = box.height;
+  // Where each card sticks: under the navigation, or higher when the card is taller than the screen,
+  // so its bottom edge stays in view. Runs when a card changes size (width change, fonts), not on scroll.
+  function layout() {
+    const screenHeight = probe.offsetHeight;
+    const base = parseFloat(getComputedStyle(stack).getPropertyValue('--stack-top')) || 0;
+    items.forEach((item, index) => {
+      item.height = item.card.offsetHeight;
+      item.stick = Math.min(base + index * STEP, screenHeight - item.height - BOTTOM_MARGIN);
+      if (item.sticky) item.card.style.top = `${item.stick}px`;
     });
-    stack.classList.add('is-stacked');
-    items.forEach(item => { item.stick = parseFloat(getComputedStyle(item.card).top) || 0; });
-    // Every card that gets covered has to fit on screen; if one doesn't, the cases stay as a plain list
-    stacked = items.slice(0, -1).every(item => item.stick + item.height + BOTTOM_MARGIN <= window.innerHeight);
-    stack.classList.toggle('is-stacked', stacked);
-    if (stacked) update();
-    else items.forEach(item => paint(item, 0));
+    update();
   }
 
   function update() {
     ticking = false;
-    if (!stacked) return;
-    const scrollY = window.scrollY;
+    const tops = items.map(item => item.card.getBoundingClientRect().top);
     for (let i = 0; i < items.length - 1; i++) {
       const item = items[i];
       const next = items[i + 1];
-      // From the moment the next card touches this one's bottom edge until it is fully on top
-      const start = item.stick + item.height;
-      const end = next.stick || item.stick;
-      const nextTop = next.top - scrollY;
-      const progress = Math.round(Math.min(1, Math.max(0, (start - nextTop) / (start - end))) * 1000) / 1000;
-      paint(item, progress);
+      // From the moment the next card touches this one's bottom edge until it sits fully on top of it
+      const covered = tops[i] + item.height - tops[i + 1];
+      const travel = item.height - (next.sticky ? next.stick - item.stick : STEP);
+      const progress = travel > 0 ? Math.round(Math.min(1, Math.max(0, covered / travel)) * 1000) / 1000 : 0;
+      if (progress === item.progress) continue;
+      item.progress = progress;
+      item.body.style.transform = progress ? `scale(${1 - progress * SHRINK})` : '';
+      item.dim.style.opacity = progress * DIM;
     }
   }
 
   window.addEventListener('scroll', () => {
-    if (!stacked || !onScreen || ticking) return;
+    if (!onScreen || ticking) return;
     ticking = true;
     requestAnimationFrame(update);
   }, { passive: true });
@@ -307,18 +304,16 @@ function initCaseStack() {
 
   // Keyboard: a link inside a covered card would get focus behind the next one, so bring its card back first
   stack.addEventListener('focusin', e => {
-    const item = items.find(it => it.card.contains(e.target));
-    if (stacked && item && item.progress > 0) window.scrollTo({ top: item.top - item.stick, behavior: 'auto' });
+    const index = items.findIndex(item => item.card.contains(e.target));
+    if (index < 0 || !items[index].progress) return;
+    let top = stack.getBoundingClientRect().top + window.scrollY;
+    for (let i = 0; i < index; i++) top += items[i].height + parseFloat(getComputedStyle(items[i].card).marginBottom);
+    window.scrollTo({ top: top - items[index].stick, behavior: 'auto' });
   });
 
-  // Anything that changes the page height (fonts, the agenda, a rotated phone) moves the cards
-  let measuring = 0;
-  const scheduleMeasure = () => {
-    if (!measuring) measuring = requestAnimationFrame(() => { measuring = 0; measure(); });
-  };
-  new ResizeObserver(scheduleMeasure).observe(document.querySelector('main'));
-  window.addEventListener('resize', scheduleMeasure, { passive: true });
-  measure();
+  const sizes = new ResizeObserver(layout);
+  items.forEach(item => sizes.observe(item.card));
+  sizes.observe(probe);
 }
 
 // Booking: free slots from Google Calendar (via /api), shown in the hero and in the #agendar section

@@ -6,6 +6,9 @@
   --wa-hover: #1ebe5b;
 }
 
+/* clip en vez de hidden: recorta igual lo que se pase de ancho, sin crear un contenedor de scroll
+   (que en Safari puede romper position: sticky) */
+body.svc { overflow-x: clip; }
 .svc main { position: relative; z-index: 1; }
 /* Luces de fondo del hero: tres gradientes quietos, pintados una sola vez (sin desenfoque ni animación) */
 .svc main::before {
@@ -280,51 +283,57 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   pointer-events: none;
 }
 .chat { position: absolute; display: none; }
-.chat-pop { animation: chatPop 500ms var(--ease-out) 200ms both; }
+/* Entrada con pop; la sombra es una mancha quieta en esta capa, que no flota */
+.chat-pop { position: relative; animation: chatPop 500ms var(--ease-out) 200ms both; }
+.chat-pop::before {
+  content: '';
+  position: absolute;
+  inset: 55% 6% -45% 6%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent);
+}
 .chat-bubble {
+  position: relative;
   display: inline-flex;
   align-items: baseline;
   gap: 10px;
-  padding: 9px 12px 9px 14px;
+  padding: 7px 10px 7px 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px 16px 16px 5px;
-  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
   color: var(--text);
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   line-height: 1.3;
   white-space: nowrap;
   transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+  animation: chatFloat var(--dur, 7s) ease-in-out var(--delay, 0s) infinite;
 }
 .chat-time {
   font-family: var(--font-mono);
   font-size: 0.66rem;
   color: var(--text-faint);
 }
-/* Celular: dos burbujas quietas, donde no tapan nada. Una arriba, entre el menú y la presentación,
-   y otra pegada sobre la esquina de la agenda. */
-.chat:nth-child(2) { display: block; top: 70px; right: 22px; --rot: 3deg; }
-.chat .chat-bubble,
-.chat-pinned {
-  padding: 7px 10px 7px 12px;
-  font-size: 0.82rem;
-}
-.svc-demo-wrap { position: relative; }
-.chat-pinned {
-  --rot: -3deg;
-  position: absolute;
-  top: -27px;
-  right: 10px;
-  z-index: 1;
-}
 @keyframes chatPop { from { opacity: 0; transform: scale(0.7); } }
-@keyframes chatPinnedPop { from { opacity: 0; transform: rotate(var(--rot)) scale(0.7); } }
-.svc-demo-wrap > .chat-pinned { animation: chatPinnedPop 500ms var(--ease-out) 400ms both; }
 @keyframes chatFloat {
   0%, 100% { transform: rotate(var(--rot)); }
   35% { transform: translate(var(--fx), var(--fy)) rotate(calc(var(--rot) + var(--sway))); }
   70% { transform: translate(calc(var(--fx) * -0.6), calc(var(--fy) * 0.5)) rotate(calc(var(--rot) - var(--sway) * 0.6)); }
 }
+/* Celular: tres burbujas que flotan donde no tapan nada (sin arrastre). Una arriba, entre el menú y la
+   presentación; una pegada sobre la esquina de la agenda; y una al pie del hero, debajo de la agenda. */
+.chat:nth-child(2) { display: block; top: 70px; right: 22px; --rot: 3deg; --sway: -3deg; --fx: -4px; --fy: 4px; --dur: 6.4s; --delay: -2s; }
+.chat:nth-child(3) { display: block; bottom: 18px; left: 26px; --rot: 4deg; --sway: 3deg; --fx: 5px; --fy: -4px; --dur: 8.3s; --delay: -5s; }
+.chat:nth-child(3) .chat-pop { animation-delay: 340ms; }
+.svc-demo-wrap { position: relative; }
+.chat-pinned {
+  display: block;
+  top: -27px;
+  right: 10px;
+  z-index: 1;
+  pointer-events: none;
+  --rot: -3deg; --sway: 3deg; --fx: 4px; --fy: -5px; --dur: 7.3s; --delay: -3.5s;
+}
+.chat-pinned .chat-pop { animation-delay: 420ms; }
 
 /* Agenda en vivo del hero */
 .svc-demo-wrap { width: 100%; max-width: 380px; justify-self: center; }
@@ -629,12 +638,23 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
 }
 
 /* Apilado: cada tarjeta queda fija arriba y la siguiente sube y la tapa. La tapada se achica y se apaga:
-   servicios.js escribe al hacer scroll la escala de la tarjeta y la opacidad de su velo (solo transform y opacity). */
-.case-stack.is-stacked .case-card:not(:last-child) {
+   servicios.js escribe al hacer scroll la escala de la tarjeta y la opacidad de su velo (solo transform y opacity).
+   Si una tarjeta es más alta que la pantalla, servicios.js le sube el tope para que se fije con el borde de abajo a la vista. */
+.case-stack.is-stacked .case-card:not(:last-of-type) {
   position: sticky;
   top: calc(var(--stack-top) + var(--i) * 10px);
 }
-.case-stack.is-stacked .case-card { contain: layout; }
+/* Mide el alto de pantalla con las barras del navegador a la vista (el más chico), que no cambia al hacer scroll */
+.case-probe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100vh;
+  height: 100svh;
+  visibility: hidden;
+  pointer-events: none;
+}
 .case-stack.is-stacked .case-body {
   transform-origin: center top;
   will-change: transform;
@@ -1063,28 +1083,15 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
      aunque se arrastre una burbuja encima, nunca tapa el título ni los botones. */
   .svc-hero-text, .svc-demo-wrap { z-index: 1; }
   .svc-hero-text { position: relative; }
-  .chat-pinned { display: none; }
+  .chat.chat-pinned { display: none; }
   .chat {
     display: block;
     pointer-events: auto;
     -webkit-user-select: none;
     user-select: none;
   }
-  /* La burbuja que flota no lleva sombra propia: la sombra es una mancha quieta en la capa de abajo */
-  .chat .chat-bubble {
-    padding: 9px 12px 9px 14px;
-    font-size: 0.92rem;
-    box-shadow: none;
-    will-change: transform;
-    animation: chatFloat var(--dur) ease-in-out var(--delay) infinite;
-  }
-  .chat-pop { position: relative; transition: transform 160ms var(--ease-out); }
-  .chat-pop::before {
-    content: '';
-    position: absolute;
-    inset: 55% 6% -45% 6%;
-    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent);
-  }
+  .chat .chat-bubble { padding: 9px 12px 9px 14px; font-size: 0.92rem; }
+  .chat-pop { transition: transform 160ms var(--ease-out); }
   /* Entre 900 y 1200 px no hay margen para las cinco: quedan tres */
   .chat:nth-child(2), .chat:nth-child(5) { display: none; }
 
@@ -1092,7 +1099,7 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
      Los topes (max/min) las mantienen debajo de la navegación y dentro del hero en pantallas bajas. */
   .chat:nth-child(1) { right: 64px; top: max(92px, calc(50% - 306px)); --rot: -4deg; --sway: 3deg; --fx: 5px; --fy: -8px; --dur: 7.2s; --delay: -1.5s; }
   .chat:nth-child(2) { left: 372px; right: auto; top: max(104px, calc(50% - 290px)); --rot: 3deg; --sway: -4deg; --fx: -6px; --fy: -6px; --dur: 6s; --delay: -3.2s; }
-  .chat:nth-child(3) { right: 124px; top: min(calc(100% - 70px), calc(50% + 268px)); --rot: 5deg; --sway: 3deg; --fx: -5px; --fy: 7px; --dur: 8.1s; --delay: -5s; }
+  .chat:nth-child(3) { right: 124px; left: auto; bottom: auto; top: min(calc(100% - 70px), calc(50% + 268px)); --rot: 5deg; --sway: 3deg; --fx: -5px; --fy: 7px; --dur: 8.1s; --delay: -5s; }
   .chat:nth-child(4) { right: 318px; top: min(calc(100% - 56px), calc(50% + 300px)); --rot: -3deg; --sway: 5deg; --fx: 7px; --fy: -5px; --dur: 6.7s; --delay: -2.4s; }
   .chat:nth-child(5) { left: 44px; top: min(calc(100% - 62px), calc(50% + 282px)); --rot: 4deg; --sway: -3deg; --fx: 6px; --fy: 6px; --dur: 9s; --delay: -6.3s; }
   .chat:nth-child(1) .chat-pop { animation-delay: 200ms; }
