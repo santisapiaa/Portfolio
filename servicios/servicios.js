@@ -29,6 +29,7 @@ initScrollReveal();
 initNavbar();
 initMobileMenu();
 initHeroScrollProgress();
+initHeroPause();
 initHeroRotator();
 initHeroChats();
 
@@ -112,20 +113,53 @@ function initMobileMenu() {
   window.matchMedia(DESKTOP_QUERY).addEventListener('change', e => { if (e.matches && menuIsOpen()) setMenu(false); });
 }
 
-// Hero: as the page scrolls, the text fades and the agenda card rises faster (CSS reads --hp, desktop only)
+// Hero: as the page scrolls, the text fades and the agenda card rises faster (desktop only).
+// Each block gets its own transform, so nothing else has to be restyled, and it stops once the hero is gone.
 function initHeroScrollProgress() {
   const hero = document.getElementById('inicio');
   if (!hero || reduceMotion) return;
+  const text = hero.querySelector('.svc-hero-text');
+  const agenda = hero.querySelector('.svc-demo-wrap');
+  const chats = document.getElementById('heroChats');
+  const desktop = window.matchMedia('(min-width: 900px)');
+  let heroHeight = hero.offsetHeight;
+  let applied = 0;
   let ticking = false;
-  const update = () => {
+
+  function update() {
     ticking = false;
-    const progress = Math.min(1, Math.max(0, window.scrollY / hero.offsetHeight));
-    hero.style.setProperty('--hp', progress.toFixed(3));
-  };
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
+    const progress = desktop.matches ? Math.round(Math.min(1, Math.max(0, window.scrollY / heroHeight)) * 1000) / 1000 : 0;
+    if (progress === applied) return;
+    applied = progress;
+    if (!progress) {
+      [text, agenda, chats].forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+      return;
+    }
+    text.style.transform = `translate3d(0, ${progress * -60}px, 0)`;
+    text.style.opacity = Math.max(0, 1 - progress * 1.1);
+    agenda.style.transform = `translate3d(0, ${progress * -170}px, 0) rotate(${progress * -2}deg)`;
+    chats.style.transform = `translate3d(0, ${progress * -120}px, 0)`;
+    chats.style.opacity = Math.max(0, 1 - progress * 1.6);
+  }
+  const requestUpdate = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', () => { heroHeight = hero.offsetHeight; requestUpdate(); }, { passive: true });
   update();
+}
+
+// Hero: whatever loops (floating bubbles, status dot, rotating words) pauses off screen and in a hidden tab
+let heroPaused = false;
+function initHeroPause() {
+  const hero = document.getElementById('inicio');
+  if (!hero || !('IntersectionObserver' in window)) return;
+  let onScreen = true;
+  const sync = () => {
+    heroPaused = !onScreen || document.hidden;
+    hero.classList.toggle('is-paused', heroPaused);
+  };
+  new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; sync(); }).observe(hero);
+  document.addEventListener('visibilitychange', sync);
 }
 
 // Hero title: the last words rotate (static for people who prefer reduced motion)
@@ -137,6 +171,7 @@ function initHeroRotator() {
   const words = [...rotator.children];
   let current = 0;
   setInterval(() => {
+    if (heroPaused) return;
     const prev = words[current];
     current = (current + 1) % words.length;
     prev.classList.replace('is-active', 'is-leaving');
@@ -154,6 +189,7 @@ function initHeroChats() {
   layer.querySelectorAll('.chat').forEach(chat => {
     let x = 0, y = 0;
     let drag = null;
+    let frame = 0;
 
     chat.addEventListener('pointerdown', e => {
       if (e.button !== 0) return;
@@ -173,11 +209,16 @@ function initHeroChats() {
       e.preventDefault();
     });
 
+    // The pointer can fire several times per frame: keep the last position and paint it once
+    const paint = () => {
+      frame = 0;
+      chat.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    };
     chat.addEventListener('pointermove', e => {
       if (!drag) return;
       x = Math.min(drag.maxX, Math.max(drag.minX, e.clientX - drag.startX));
       y = Math.min(drag.maxY, Math.max(drag.minY, e.clientY - drag.startY));
-      chat.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      if (!frame) frame = requestAnimationFrame(paint);
     });
 
     const release = () => {
