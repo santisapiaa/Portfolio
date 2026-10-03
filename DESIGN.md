@@ -252,6 +252,12 @@ Táctiles y seguros: se levantan al pasar el cursor y los estados elegidos se pi
 ### Línea de tiempo
 Una línea vertical de 1px con puntos Aguamarina de 9px rodeados por un anillo de Velo Aguamarina. Fecha en mono apagado, título, subtítulo en Aguamarina Profunda y párrafo tenue.
 
+### Burbujas de mensaje
+Preguntas de clientes en forma de chat, decorativas (`aria-hidden`), solo en el hero de `/servicios`. Fondo Superficie, borde de 1px, 16px de radio con la esquina inferior izquierda en 5px, texto de 0.82rem a 0.92rem y la hora en mono apagado. Cada una tiene una inclinación propia de 3° a 5°.
+
+### Casos
+Una tarjeta por caso, con una pestaña de carpeta en mono ("Caso 01") corrida a la derecha de la anterior para que se vean todas al apilarse. Las pestañas alternan Velo Aguamarina, un velo de Miel y Superficie Hover. Adentro: la captura de escritorio en un marco de navegador con la de celular superpuesta en la esquina, una insignia ("Caso real" o "Proyecto en equipo"), el rubro en Miel, el texto y tres chips con las funciones. Para sumar un caso se copia un bloque `article.case-card` en `servicios/index.html`.
+
 ### Agenda (signature)
 La pieza distintiva de `/servicios`. Los días son tarjetas angostas en una fila que se desliza, con el día de la semana en mono y el número grande. Los horarios son una grilla de botones mono de 8px de radio. El día elegido toma borde Aguamarina y fondo de velo; el horario elegido se rellena entero de Aguamarina. Mientras carga muestra bloques que laten, y al confirmar abre un diálogo centrado con un ícono circular.
 
@@ -261,9 +267,14 @@ Dos curvas, definidas como variables en `style.css`: `--ease-out` (`cubic-bezier
 - **Presión:** todo lo que se aprieta se achica al tocarlo. Botones a `scale(0.97)` en 160ms; días, horarios y el botón de copiar a `scale(0.96)` en 140ms; el botón flotante de WhatsApp a `scale(0.95)`. El botón principal además baja de su elevación.
 - **Hover:** las tarjetas suben entre 3px y 4px y los botones 2px, en 200ms y 160ms. La elevación solo existe con mouse (`hover: hover` y `pointer: fine`); en pantallas táctiles queda el cambio de color y borde.
 - **Menús y diálogo:** el menú de idiomas crece desde su botón (`scale(0.97)`, 150ms) y el menú móvil del portfolio baja 8px en 200ms. El diálogo de la agenda entra desde `scale(0.94)` en 220ms y sale más rápido, en 150ms. Las preguntas frecuentes despliegan su altura en 250ms donde el navegador lo soporta.
-- **Entradas:** las secciones suben 16px en 500ms al hacer scroll. El menú móvil de `/servicios` entra escalonado cada 40ms, en 300ms. El hero de `/servicios` entra escalonado en 0.7s a 0.9s y tiene tres luces de fondo que derivan entre 18s y 27s.
+- **Entradas:** las secciones suben 16px en 500ms al hacer scroll. El menú móvil de `/servicios` entra escalonado cada 40ms, en 300ms.
+- **Hero de `/servicios`:** todo queda a la vista en menos de 1s. El título entra palabra por palabra (sube 12px, 450ms, una cada 40ms), el resto del texto escalonado en 500ms y la agenda sube en 750ms. Las luces de fondo son tres gradientes quietos, sin desenfoque ni animación.
+- **Mensajes del hero:** burbujas de chat que entran con un pop (`scale(0.7)` a 1, 500ms, una cada 70ms) y flotan en loop con `@keyframes` (5 a 8px y 3 a 5° sobre su inclinación base), cada una con su duración (6 a 9s) y un delay negativo para que nunca se muevan a la par. Con mouse se arrastran: la flotación se pausa, crecen a `scale(1.05)` y al soltarlas vuelven a flotar donde quedaron. En celular son dos y están quietas. La capa va por debajo del texto y de la agenda, y la flotación se pausa cuando el hero sale de pantalla o la pestaña se oculta.
+- **Casos apilados:** cada tarjeta queda fija arriba (`position: sticky`) y la siguiente sube y la tapa. La tapada baja a `scale(0.94)` y un velo en color Fondo sube a 0.6 de opacidad, en proporción al scroll. Si una tarjeta no entra en el alto de la pantalla, los casos quedan como lista simple con la entrada de siempre.
 - **Navegación de `/servicios`:** se contrae en píldora en 300ms; el título rotativo cambia en 0.45s.
 - **Constantes:** el cursor y los puntos de estado parpadean.
+
+**Regla del Movimiento Liviano.** Lo que se mueve solo cambia `transform` y `opacity`. Nada que flote, se arrastre o se apile lleva `filter`, `backdrop-filter` ni sombras grandes: si hace falta una sombra, va en una capa quieta. `will-change` se pone únicamente en el elemento que se mueve. Lo que depende del scroll se escribe dentro de `requestAnimationFrame`, desde un listener pasivo, directo sobre el elemento (sin variables heredadas que obliguen a recalcular a los hijos) y con las posiciones medidas una sola vez. Los loops se pausan fuera de pantalla.
 
 **Regla del Movimiento Reducido.** Con `prefers-reduced-motion` no se mueve nada: sin animaciones, sin elevación, sin presión y sin entradas. Se conservan las transiciones de color, borde, sombra y opacidad, porque ayudan a entender el cambio de estado.
 
@@ -278,10 +289,12 @@ Dos curvas, definidas como variables en `style.css`: `--ease-out` (`cubic-bezier
 - **Do** mantener el foco de teclado visible: contorno de 2px en Aguamarina a 3px.
 - **Do** dar a todo lo que se aprieta un estado de presión (`scale(0.97)`, 160ms) y usar `--ease-out` para cualquier movimiento nuevo.
 - **Do** poner las elevaciones de hover dentro de `@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)`.
+- **Do** animar solo `transform` y `opacity`, y medir con un trace antes de sumar movimiento nuevo a `/servicios`.
 - **Do** respetar `prefers-reduced-motion` en cualquier animación nueva (sin movimiento, solo color y opacidad) y mantener 44px de área táctil en íconos.
 
 ### Don't:
 - **Don't** agregar un tema claro ni superficies blancas.
+- **Don't** poner `filter`, `backdrop-filter` ni sombras grandes en elementos que se mueven, ni animar las luces de fondo.
 - **Don't** sumar colores de acento: son Aguamarina y Miel, y el verde es solo de WhatsApp.
 - **Don't** llevar el sitio hacia neón o cyberpunk: nada de brillos saturados, bordes luminosos en todo ni varios resplandores a la vez.
 - **Don't** usar ilustraciones de stock ni bloques genéricos de plantilla de agencia; las imágenes son capturas reales de los proyectos y la foto.
