@@ -197,7 +197,7 @@ La profundidad aparece en tres casos: lo que flota por encima de la página (men
 - **Flotante** (`box-shadow: 0 16px 40px -12px rgba(0,0,0,0.6)`): menú de idiomas y navegación en píldora al bajar.
 - **Diálogo** (`box-shadow: 0 30px 80px rgba(0,0,0,0.6)`): confirmación de la agenda, sobre un fondo oscurecido y desenfocado.
 - **Resplandor de protagonista** (`box-shadow: 0 30px 60px -30px rgba(94,234,212,0.25)`): foto del hero, agenda en vivo y plan destacado (este último con 0.45 de opacidad).
-- **Resplandor de hover** (`box-shadow: 0 14px 30px -18px rgba(94,234,212,0.45)`): tarjetas de contacto de `/servicios` al pasar el cursor.
+- **Resplandor de hover** (`box-shadow: 0 18px 36px -20px rgba(0,0,0,0.8), 0 14px 30px -18px rgba(94,234,212,0.35)`): la sombra de las tarjetas `.glow-card` de `/servicios` al pasar el cursor. Vive en una capa aparte que solo cambia de opacidad.
 
 ### Named Rules
 **Regla del Plano en Reposo.** Una tarjeta quieta no tiene sombra. La sombra es respuesta a la interacción o señal de que algo flota.
@@ -246,6 +246,15 @@ Táctiles y seguros: se levantan al pasar el cursor y los estados elegidos se pi
 - **/servicios:** barra transparente que al bajar se contrae en una píldora flotante de hasta 880px, con desenfoque y sombra. El link de la sección actual se marca con Velo Aguamarina. En celular abre un menú a pantalla completa con links grandes numerados en mono que entran escalonados.
 - **Selector de idioma:** píldora con bandera y sigla en mono; despliega un menú flotante de 12px de radio.
 
+### Hover de tarjetas (`.glow-card`)
+El hover de todas las tarjetas de `/servicios` es un solo sistema, en `servicios/servicios.css`. Con mouse, la tarjeta sube 4px, aparece la sombra, una luz aguamarina muy tenue sigue al cursor, el ícono (o el círculo del número) se llena de Aguamarina con trazo oscuro, el título se tiñe a mitad de camino hacia el acento y el borde pasa a Aguamarina Profunda. Nada cambia de tamaño.
+
+- **`.glow-card`** (completa): tarjetas que se recorren con la vista y son todas iguales entre sí. Hoy: "¿Te pasa alguna de estas?", "Qué hago", Paquetes y Proceso. Las de Contacto también la usan, sin la luz, porque son filas angostas.
+- **`.glow-card.glow-card-flat`** (reducida: borde, luz y título, sin elevación ni sombra): filas en lista y desplegables, donde subir y bajar de a una se siente inquieto. Hoy: Preguntas frecuentes.
+- **Ninguna:** lo que ya tiene movimiento propio (los casos apilados) y lo que es un formulario o un widget y no una tarjeta para recorrer (la agenda, la caja de WhatsApp, la agenda del hero).
+
+Dentro de una `.glow-card` el botón principal no sube por su cuenta: solo cambia de color.
+
 ### Desplegables
 `details` nativos con un "+" en mono Aguamarina que pasa a "−" al abrir. Se usan para el detalle de cada proyecto y para las preguntas frecuentes, donde el borde pasa a Aguamarina Profunda al abrirse.
 
@@ -265,7 +274,7 @@ La pieza distintiva de `/servicios`. Los días son tarjetas angostas en una fila
 Dos curvas, definidas como variables en `style.css`: `--ease-out` (`cubic-bezier(0.23, 1, 0.32, 1)`) para todo lo que entra, se levanta o se aprieta, y `--ease-in-out` (`cubic-bezier(0.77, 0, 0.175, 1)`) para lo que cambia de forma en pantalla, como la navegación de `/servicios`. Los cambios de color, borde y sombra usan `ease` en 0.2s.
 
 - **Presión:** todo lo que se aprieta se achica al tocarlo. Botones a `scale(0.97)` en 160ms; días, horarios y el botón de copiar a `scale(0.96)` en 140ms; el botón flotante de WhatsApp a `scale(0.95)`. El botón principal además baja de su elevación.
-- **Hover:** las tarjetas suben entre 3px y 4px y los botones 2px, en 200ms y 160ms. La elevación solo existe con mouse (`hover: hover` y `pointer: fine`); en pantallas táctiles queda el cambio de color y borde.
+- **Hover:** en el portfolio las tarjetas suben entre 3px y 4px y los botones 2px, en 200ms y 160ms. En `/servicios` las tarjetas usan `.glow-card`: suben 4px en 220ms con `--ease-out` y bajan en el mismo tiempo; la sombra y la luz aparecen por opacidad en 220ms y los colores cambian en 200ms. La luz sigue al cursor con `--x` / `--y`, escritas dentro de `requestAnimationFrame` solo en la tarjeta que tiene el mouse. La elevación solo existe con mouse (`hover: hover` y `pointer: fine`); en pantallas táctiles no cambia nada.
 - **Menús y diálogo:** el menú de idiomas crece desde su botón (`scale(0.97)`, 150ms) y el menú móvil del portfolio baja 8px en 200ms. El diálogo de la agenda entra desde `scale(0.94)` en 220ms y sale más rápido, en 150ms. Las preguntas frecuentes despliegan su altura en 250ms donde el navegador lo soporta.
 - **Entradas:** las secciones suben 16px en 500ms al hacer scroll. El menú móvil de `/servicios` entra escalonado cada 40ms, en 300ms.
 - **Hero de `/servicios`:** todo queda a la vista en menos de 1s. El título entra palabra por palabra (sube 12px, 450ms, una cada 40ms), el resto del texto escalonado en 500ms y la agenda sube en 750ms. Las luces de fondo son tres gradientes quietos, sin desenfoque ni animación.
@@ -274,9 +283,11 @@ Dos curvas, definidas como variables en `style.css`: `--ease-out` (`cubic-bezier
 - **Navegación de `/servicios`:** se contrae en píldora en 300ms; el título rotativo cambia en 0.45s.
 - **Constantes:** el cursor y los puntos de estado parpadean.
 
+**Regla de la Sombra Quieta.** `box-shadow` no se anima nunca. Una sombra que aparece o desaparece se pinta en una capa aparte (un pseudo-elemento) y lo que cambia es su opacidad. Vale para el hover de las tarjetas y para la píldora de la navegación.
+
 **Regla del Movimiento Liviano.** Lo que se mueve solo cambia `transform` y `opacity`. Nada que flote, se arrastre o se apile lleva `filter`, `backdrop-filter` ni sombras grandes: si hace falta una sombra, va en una capa quieta. `will-change` se pone únicamente en el elemento que se mueve. Lo que depende del scroll se escribe dentro de `requestAnimationFrame`, desde un listener pasivo, directo sobre el elemento (sin variables heredadas que obliguen a recalcular a los hijos) y con las posiciones medidas una sola vez. Los loops se pausan fuera de pantalla.
 
-**Regla del Movimiento Reducido.** Con `prefers-reduced-motion` no se mueve nada: sin animaciones, sin elevación, sin presión y sin entradas. Se conservan las transiciones de color, borde, sombra y opacidad, porque ayudan a entender el cambio de estado.
+**Regla del Movimiento Reducido.** Con `prefers-reduced-motion` no se mueve nada: sin animaciones, sin elevación, sin presión y sin entradas. Se conservan las transiciones de color, borde, sombra y opacidad, porque ayudan a entender el cambio de estado. En `/servicios` la sombra queda afuera de esa lista: con movimiento reducido el hover de las tarjetas es solo el cambio de color (borde, ícono y título), sin elevación, sombra ni luz.
 
 ## Do's and Don'ts
 
