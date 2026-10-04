@@ -51,10 +51,24 @@ body.svc { overflow-x: clip; }
   padding: 18px 24px;
   border: 1px solid transparent;
   border-radius: 20px;
+  position: relative;
+  z-index: 0;
   transition: max-width 300ms var(--ease-in-out), margin 300ms var(--ease-in-out), padding 300ms var(--ease-in-out),
-    background 300ms var(--ease-in-out), border-color 300ms var(--ease-in-out), box-shadow 300ms var(--ease-in-out),
-    backdrop-filter 300ms var(--ease-in-out);
+    background 300ms var(--ease-in-out), border-color 300ms var(--ease-in-out), backdrop-filter 300ms var(--ease-in-out);
 }
+/* La sombra de la píldora ya está pintada en esta capa y solo aparece (no se anima box-shadow) */
+.svc-nav .nav-inner::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-in-out);
+}
+.svc-nav.is-scrolled .nav-inner::before { opacity: 1; }
 .svc-nav.is-scrolled .nav-inner {
   max-width: min(880px, calc(100% - 24px));
   margin-top: 12px;
@@ -63,7 +77,6 @@ body.svc { overflow-x: clip; }
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
   border-color: var(--border);
-  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.7);
 }
 .svc-nav .nav-links {
   flex: 1;
@@ -470,7 +483,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   padding: 28px 24px;
   transition: border-color 0.25s;
 }
-.service-card:hover { border-color: var(--accent-dim); }
 .service-featured {
   border-color: var(--accent-dim);
   background: linear-gradient(180deg, rgba(94, 234, 212, 0.07), var(--surface) 60%);
@@ -500,7 +512,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   padding: 24px;
   transition: border-color 0.25s;
 }
-.problem-card:hover { border-color: var(--accent-dim); }
 .problem-icon {
   display: inline-flex;
   width: 44px;
@@ -885,12 +896,10 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
-  transition: border-color 0.2s ease, transform 200ms var(--ease-out), box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
-.c-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 14px 30px -18px rgba(94, 234, 212, 0.45);
-}
+/* Contacto usa el hover de tarjetas sin la luz que sigue al cursor: son filas angostas */
+.c-card.glow-card::after { display: none; }
 .c-card-main { border-color: var(--accent-dim); }
 /* La tarjeta del mail no es un link en sí: muestra el foco del link que tiene adentro */
 .c-card-mail:has(.c-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -924,7 +933,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   transition: color 0.2s, background 0.2s;
 }
 .c-action svg { width: 18px; height: 18px; }
-.c-card:hover .c-action { color: var(--accent); }
 /* Tarjeta "Redes": no es un link, los clickeables son los íconos (44 px de área táctil) */
 .c-socials { flex: none; display: flex; gap: 8px; }
 .c-social {
@@ -1302,7 +1310,6 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .nav-wa:active,
   .btn-wa:active { transform: translateY(0) scale(0.97); }
   .case-card:hover .shot-desktop img { transform: scale(1.03); }
-  .c-card:hover { transform: translateY(-3px); }
   .wa-float:hover { transform: scale(1.06); }
   .wa-float:active { transform: scale(0.95); }
 }
@@ -1374,14 +1381,24 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
   background: radial-gradient(240px circle at var(--x) var(--y), rgba(94, 234, 212, 0.11), transparent 70%);
 }
 .glow-card .problem-icon,
-.glow-card .step-num { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
-.glow-card h3 { transition: color 200ms ease; }
+.glow-card .step-num,
+.glow-card .c-icon { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+.glow-card h3,
+.glow-card summary,
+.glow-card .c-title { transition: color 200ms ease; }
 
 @media (hover: hover) and (pointer: fine) {
   .glow-card:hover { border-color: var(--accent-dim); }
+  .plan-featured.glow-card:hover, .c-card.glow-card:hover { border-color: var(--accent); }
+  .c-card:hover .c-action { color: var(--accent); }
   .glow-card:hover .problem-icon,
-  .glow-card:hover .step-num { background: var(--accent); border-color: var(--accent); color: #06110e; }
-  .glow-card:hover h3 { color: #a8f0e3; color: color-mix(in srgb, var(--text) 45%, var(--accent)); }
+  .glow-card:hover .step-num,
+  .glow-card:hover .c-icon { background: var(--accent); border-color: var(--accent); color: #06110e; }
+  .glow-card:hover h3,
+  .glow-card:hover summary,
+  .glow-card:hover .c-title { color: #a8f0e3; color: color-mix(in srgb, var(--text) 45%, var(--accent)); }
+  /* Dentro de una tarjeta que sube, el botón no sube por su cuenta: una sola cosa se mueve a la vez */
+  .glow-card .btn-primary:hover { transform: none; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   /* translate (y no transform) para no pisar la entrada al hacer scroll, que usa transform */
@@ -1390,9 +1407,17 @@ body.menu-open .wa-float { opacity: 0; pointer-events: none; }
       opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
   }
   .glow-card:not(.glow-card-flat):hover { translate: 0 -4px; }
+  .glow-card .btn-primary:active { transform: scale(0.97); }
   .glow-card:not(.glow-card-flat):hover::before,
   .glow-card:hover::after { opacity: 1; }
   /* La capa de la sombra se estira 4px hacia abajo y atrapa el mouse: sin esto, con el cursor justo en el
      borde de abajo, la tarjeta sube, pierde el hover, baja y vuelve a subir */
   .glow-card:not(.glow-card-flat):hover::before { bottom: -5px; pointer-events: auto; }
+}
+
+/* MOVIMIENTO REDUCIDO en /servicios: quedan solo los cambios suaves de color y opacidad (box-shadow no se anima) */
+@media (prefers-reduced-motion: reduce) {
+  .svc, .svc *, .svc *::before, .svc *::after {
+    transition-property: color, background-color, border-color, opacity !important;
+  }
 }
